@@ -25,16 +25,17 @@
   (def zoomElem (.querySelector js/document "#Canvas"))
   (if zoomElem
     (do
-      (def panHandler (.zoomAbs (panzoom zoomElem (clj->js {:maxZoom 1 :minZoom 0.25
+      (def panHandler (panzoom zoomElem (clj->js {:maxZoom 1 :minZoom 0.25
                                               :minScale 1
                                               :boundsPadding 1 ; it multiplies by this is in the code for panzoom
                                               :transformOrigin {:x 0.5 :y 0.5}
-                                              :bounds true})) -1500 -1500 0.5))
+                                              :bounds true})))
 
-
+    ; (js/setTimeout #(print zoomElem) 1000)
+    (.zoomAbs panHandler -1500 -1500 0.5)
     ; (.on panHandler "transform" (fn [e] (print e)))
-    ; (.on panHandler "zoomed" (fn [e] ; we need to pull the zoom in order to adjust the onclick coords
-    ;   (js/console.log e)))
+    (.on panHandler "transform" (fn [e] ; we need to pull the zoom in order to adjust the onclick coords
+      (swap! canvas-properties conj {:zoom (.-scale (.getTransform e))})))
 
 
       ; (def panHandler (panzoom zoomElem (clj->js {:maxZoom 1 :minZoom 0.1
@@ -46,27 +47,23 @@
 )))
 
 (defn get-x-position [x offset]
-  (print x)
-  (print offset)
-  (let [actual-x (+ x offset)]
-    (print actual-x)
+  ; (print x)
+  ; (print offset)
+  (let [actual-x (/ (+ x offset) (:zoom @canvas-properties))]
     (cond
       (< actual-x 42) 0
       (< actual-x 92) 42
-      :else (+ 42 (* (mod (- actual-x 42) 50) 50)))
+      :else (+ 42 (* (quot (- actual-x 42) 50) 50)))
   )
     ; 3 cases to watch for
 
     ; under 42 then its 0
-    ; over 42 < 142 then it's 42
+    ; over 42 < 92 then it's 42
     ; greater than 92 = total - 42 % 50 * 50 + 42
   )
 
 (defn handle-canvas-click [event]
-  ; (js/console.log (.-target js/event))
-  (get-x-position (.-clientX event) (.-x (.getBoundingClientRect (.-target event))))
-  ; (js/console.log (.getBoundingClientRect (.-target event)))
-)
+  (let [xEvent (get-x-position (.-clientX event) (.-x (.getBoundingClientRect (.-target event))))]))
 
 (defn Canvas-Component [active]
   (reagent/create-class                 ;; <-- expects a map of functions
