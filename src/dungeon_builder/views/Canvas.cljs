@@ -7,12 +7,22 @@
 (def current-paint (atom [{:name "tile" :x "41px" :y "41px"}
                           {:name "wall_tile" :x "91px" :y "91px"}]))
 
-(def canvas-properties (atom {:ctx nil
+
+; (let )
+;  var img=new Image();
+;     img.src=url;
+
+(def canvas-properties (atom {:panRef nil
                               :fillColor "black"
                               :zoom 0.5
+                              :paint false
                               :currentTile "tile"}))
 
+(defn handle-on-mouseDown []
+  (swap! canvas-properties conj {:paint true}))
 
+(defn handle-on-mouseUp []
+  (swap! canvas-properties conj {:paint false}))
 
 (defn render-canvas []
   (def zoomElem (.querySelector js/document "#Canvas"))
@@ -25,6 +35,7 @@
                                               :bounds true})))
 
     ; (.zoomAbs panHandler -1500 -1500 0.5)
+    (swap! canvas-properties conj {:panRef panHandler}) ; save ref to instance so we can pause later
     (.zoomAbs panHandler 0 0 0.5) ; TODO remove after testing
     (.on panHandler "transform" (fn [e] ; we need to pull the zoom in order to adjust the onclick coords
       (swap! canvas-properties conj {:zoom (.-scale (.getTransform e))}))))))
@@ -39,9 +50,12 @@
 (defn handle-canvas-click [event]
   ; NOTE the -75 for each of these is based on the header height - if we change that this needs to change as well
   ; should probably define that as a var somewhere to make it easier
-  (let [xEvent (get-tile-position (.-clientX event) (.-x (.getBoundingClientRect (.-target event))))
-        yEvent (get-tile-position (- (.-clientY event) 75) (- (.-y (.getBoundingClientRect (.-target event))) 75))]
-    (swap! current-paint conj {:name (:currentTile @canvas-properties) :x (str xEvent "px") :y (str yEvent "px")})))
+  (if (and (not= (.-nodeName (.-target event)) "IMG") (:paint @canvas-properties)) ; only on canvas clicks - we can handle images different if the src changes
+    (let [xEvent (get-tile-position (.-clientX event) (.-x (.getBoundingClientRect (.-target event))))
+          yEvent (get-tile-position (- (.-clientY event) 75) (- (.-y (.getBoundingClientRect (.-target event))) 75))]
+          (swap! current-paint conj {:name "tile" :x (str xEvent "px") :y (str yEvent "px")}))
+    ;TODO we can handle img src changes or dom removal here
+  ))
 
 (defn Canvas-Component [active]
   (reagent/create-class                 ;; <-- expects a map of functions
@@ -62,9 +76,11 @@
           [:div.Canvas
             [Controls canvas-properties]
             [:div.CanvasParent
-              [:div#Canvas {:on-click #(handle-canvas-click (-> % ))}
+              [:div#Canvas {:on-mouseMove #(handle-canvas-click (-> % ))
+                            :on-mouseDown #(handle-on-mouseDown)
+                            :on-mouseUp #(handle-on-mouseUp)}
                 (for [image @current-paint]
-                  [:img {:src (str "../"(:name image) ".jpg") :key (rand-int 10000) :style {:position "absolute" :left (:x image) :top (:y image) :width "50px" :height "50px"}}])
+                  [:img {:src (str "../"(:name image) ".jpg") :key (rand-int 1000000) :style {:position "absolute" :left (:x image) :top (:y image) :width "50px" :height "50px"}}])
                 ]]
             ])}))
 
