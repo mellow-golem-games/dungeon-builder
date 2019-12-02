@@ -4,21 +4,14 @@
             [dungeon-builder.components.Controls :refer [Controls]]
             ["panzoom" :as panzoom]))
 
-(def current-paint (atom [{:name "tile" :x "42px" :y "42px"}
-                          {:name "wall_tile" :x "92px" :y "92px"}
-]))
+(def current-paint (atom [{:name "tile" :x "41px" :y "41px"}
+                          {:name "wall_tile" :x "91px" :y "91px"}]))
+
 (def canvas-properties (atom {:ctx nil
                               :fillColor "black"
-                              :zoom 0.5}))
+                              :zoom 0.5
+                              :currentTile "tile"}))
 
-; we make a panzoom elemnt that is the size we want
-; by default it has drag to off, this can be changed by using the drag tool
-; turns off when selecting a tile type
-; should store all of this in a big array as we need to be able to adjust the tile based on neighbors - edge tiles are different from interior tiles
-
-
-;TODO We need to figure out why it zooms weird
-; TRY playing with the sizing of the grid - probably do something
 
 
 (defn render-canvas []
@@ -31,39 +24,25 @@
                                               :transformOrigin {:x 0.5 :y 0.5}
                                               :bounds true})))
 
-    ; (js/setTimeout #(print zoomElem) 1000)
-    (.zoomAbs panHandler -1500 -1500 0.5)
-    ; (.on panHandler "transform" (fn [e] (print e)))
+    ; (.zoomAbs panHandler -1500 -1500 0.5)
+    (.zoomAbs panHandler 0 0 0.5) ; TODO remove after testing
     (.on panHandler "transform" (fn [e] ; we need to pull the zoom in order to adjust the onclick coords
-      (swap! canvas-properties conj {:zoom (.-scale (.getTransform e))})))
+      (swap! canvas-properties conj {:zoom (.-scale (.getTransform e))}))))))
 
-
-      ; (def panHandler (panzoom zoomElem (clj->js {:maxZoom 1 :minZoom 0.1
-      ;                                         :minScale 1
-      ;                                         :boundsPadding 1 ; it multiplies by this is in the code for panzoom
-      ;                                         ; :transformOrigin {:x 0.5 :y 0.5}
-      ;                                         :bounds true})))
-      ; (.moveTo panHandler -1500, -1500)
-)))
-
-(defn get-x-position [x offset]
-  ; (print x)
-  ; (print offset)
-  (let [actual-x (/ (+ x offset) (:zoom @canvas-properties))]
+(defn get-tile-position [pos offset]
+  (let [actual-pos (/ (+ pos offset) (:zoom @canvas-properties))]
     (cond
-      (< actual-x 42) 0
-      (< actual-x 92) 42
-      :else (+ 42 (* (quot (- actual-x 42) 50) 50)))
-  )
-    ; 3 cases to watch for
-
-    ; under 42 then its 0
-    ; over 42 < 92 then it's 42
-    ; greater than 92 = total - 42 % 50 * 50 + 42
-  )
+      (< actual-pos 41) 0
+      (< actual-pos 91) 41
+      :else (+ 41 (* (quot (- actual-pos 41) 50) 50)))
+  ))
 
 (defn handle-canvas-click [event]
-  (let [xEvent (get-x-position (.-clientX event) (.-x (.getBoundingClientRect (.-target event))))]))
+  ; NOTE the -75 for each of these is based on the header height - if we change that this needs to change as well
+  ; should probably define that as a var somewhere to make it easier
+  (let [xEvent (get-tile-position (.-clientX event) (.-x (.getBoundingClientRect (.-target event))))
+        yEvent (get-tile-position (- (.-clientY event) 75) (- (.-y (.getBoundingClientRect (.-target event))) 75))]
+    (swap! current-paint conj {:name (:currentTile @canvas-properties) :x (str xEvent "px") :y (str yEvent "px")})))
 
 (defn Canvas-Component [active]
   (reagent/create-class                 ;; <-- expects a map of functions
@@ -93,8 +72,3 @@
 ; TODO we can probably just work with the abpve canvas - remove this and import the component
 (defn Canvas [active]
    [Canvas-Component active])
-
-
-; this.bgctx.rect(x,y,20,20);
-; this.bgctx.stroke();
-; this.ctx = canvas.getContext("2d");
