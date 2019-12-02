@@ -29,13 +29,12 @@
     (.on panHandler "transform" (fn [e] ; we need to pull the zoom in order to adjust the onclick coords
       (swap! canvas-properties conj {:zoom (.-scale (.getTransform e))}))))))
 
-(defn get-tile-position [pos offset]
-  (let [actual-pos (/ (+ pos offset) (:zoom @canvas-properties))]
+(defn get-tile-position [pos offset] ; offset is always the negitive amount moved
+  (let [actual-pos (/ (+ pos (* -1 offset)) (:zoom @canvas-properties))]
     (cond
       (< actual-pos 41) 0
       (< actual-pos 91) 41
-      :else (+ 41 (* (quot (- actual-pos 41) 50) 50)))
-  ))
+      :else (+ 41 (* (quot (- actual-pos 41) 50) 50)))))
 
 (defn handle-canvas-click [event]
   ; NOTE the -75 for each of these is based on the header height - if we change that this needs to change as well
@@ -61,11 +60,11 @@
         :reagent-render        ;; Note:  is not :render
          (fn [active]           ;; remember to repeat parameters
           [:div.Canvas
-            [Controls]
+            [Controls canvas-properties]
             [:div.CanvasParent
               [:div#Canvas {:on-click #(handle-canvas-click (-> % ))}
                 (for [image @current-paint]
-                  [:img {:src (str "../"(:name image) ".jpg") :style {:position "absolute" :left (:x image) :top (:y image) :width "50px" :height "50px"}}])
+                  [:img {:src (str "../"(:name image) ".jpg") :key (rand-int 10000) :style {:position "absolute" :left (:x image) :top (:y image) :width "50px" :height "50px"}}])
                 ]]
             ])}))
 
