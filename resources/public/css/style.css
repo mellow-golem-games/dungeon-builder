@@ -37,14 +37,14 @@ body.hide-scroll .Main {
   height: 75px;
 }
 
-.Canvas {
+/* .Canvas {
   height: 100vh;
   overflow: hidden;
 }
 
 .CanvasParent {
   width: 100%;
-  /* height: 500px; */
+  height: 500px;
   height: calc(100% - 75px);
   overflow: hidden;
   position: relative;
@@ -71,4 +71,11 @@ body.hide-scroll .Main {
   z-index: -1;
   background-size: 50px 50px;
   background-repeat: repeat;
+} */
+
+
+#Canvas {
+  border: 1px solid black;
+  width: 600px;
+  height: 400px;
 }
