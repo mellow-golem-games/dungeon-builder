@@ -8,11 +8,7 @@
   (atom {:panRef nil
          :painting false
          :paint-mode true
-         :currentTile "tile"}))
-
-; END SETUP VARIABLES
-
-
+         :currentTile "pan"}))
 
 (defn start-paint []
   (if (:paint-mode @canvas-properties)
@@ -38,14 +34,14 @@
 (defn render-canvas []
   (let [zoomElem (.querySelector js/document "#Canvas")
         ctx (.getContext zoomElem "2d")]
-    (def panHandler (panzoom zoomElem (clj->js {:maxZoom 1 :minZoom 0.5
+    (def panHandler (panzoom zoomElem (clj->js {:maxZoom 1 :minZoom 0.3
                                             :minScale 1
                                             :boundsPadding 1 ; it multiplies by this is in the code for panzoom
                                             :transformOrigin {:x 0.5 :y 0.5}
                                             :bounds true})))
     (swap! canvas-properties conj {:panRef panHandler})
-    (.zoomAbs panHandler 1500 1500 0.75)
-    (.pause panHandler)
+    (.zoomAbs panHandler -1500 -1500 0.75)
+
     (.on panHandler "transform" (fn [e] ; we need to pull the zoom in order to adjust the onclick coords
       (swap! canvas-properties conj {:zoom (.-scale (.getTransform e))})))
     (loop [x 50]
@@ -84,9 +80,8 @@
             [Controls canvas-properties]
             [:div.canvasParent
               [:canvas#Canvas {:width "3000px" :height "3000px"
-                               :on-mouseDown #(start-paint)
+                               :on-mouseDown #((do (start-paint) (paint-to-canvas (-> %)))) ; needed so a single click still works
                                :on-mouseUp #(end-paint)
-                               :on-mouseMove #(paint-to-canvas (-> %))
-}]]])}))
+                               :on-mouseMove #(paint-to-canvas (-> %))}]]])}))
 
 
