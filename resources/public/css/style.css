@@ -75,8 +75,14 @@ body.hide-scroll .Main {
 
 .Stage {
   height: 100vh;
-  width: 100;
+  width: 100%;
+}
+.canvasParent {
+  width: 100%;
+  height: 500px;
+  height: calc(100% - 75px);
   overflow: hidden;
+  position: relative;
 }
 
 #Canvas {

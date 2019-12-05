@@ -1,10 +1,12 @@
 (ns dungeon-builder.components.Controls)
 
-(defn pause-zoom [prop]
-  (.pause (:panRef @prop)))
+(defn pause-zoom [props]
+  (swap! props conj {:paint-mode true})
+  (.pause (:panRef @props)))
 
-(defn resume-zoom [prop]
-  (.resume (:panRef @prop)))
+(defn resume-zoom [props]
+  (swap! props conj {:paint-mode false})
+  (.resume (:panRef @props)))
 
 (defn update-current-tile [props name]
   (pause-zoom props)
