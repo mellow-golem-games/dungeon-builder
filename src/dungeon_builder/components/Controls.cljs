@@ -18,6 +18,8 @@
            :src "../tile.jpg" :on-click #(update-current-tile canvas-properties "tile")}]
     [:img {:class (if (= (:currentTile @canvas-properties) "wall_tile") "active")
            :src "../wall_tile.jpg" :on-click #(update-current-tile canvas-properties "wall_tile")}]
+    [:img {:class (if (= (:currentTile @canvas-properties) "wall_tile_corner") "active")
+           :src "../wall_tile_corner.jpg" :on-click #(update-current-tile canvas-properties "wall_tile_corner")}]
     [:img {:class (if (= (:currentTile @canvas-properties) "pan") "active")
            :style {:width "50px" :height "50px"}
            :src "../dragon.jpg" :on-click #(resume-zoom canvas-properties)}]]) ; dope placeholder
