@@ -38,11 +38,7 @@
   1) ; return 1 for a floor tile
 
 (defn update-canvas-rep [x y]
-  (print (/ x 50))
-  (print (/ y 50))
-  ; (print (nth (nth @canvas-rep (/ x 50)) (/ y 50)))
-  (swap! canvas-rep update-in [(/ x 50) (/ y 50)] get-tile-value)
-)
+  (swap! canvas-rep update-in [(/ y 50) (/ x 50)] get-tile-value))
 
 (defn paint-to-canvas [event]
   (if (and (:painting @canvas-properties) (:paint-mode @canvas-properties))
