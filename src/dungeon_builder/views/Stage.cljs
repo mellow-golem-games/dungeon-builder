@@ -2,13 +2,16 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [dungeon-builder.components.Controls :refer [Controls]]
             [dungeon-builder.services.state.dispatcher :refer [handle-state-change]]
+            [dungeon-builder.scripts.walls :as walls]
             ["panzoom" :as panzoom]))
 
 (def canvas-properties
   (atom {:panRef nil
          :painting false
          :paint-mode true
-         :currentTile "tile"}))
+         :tileType "floor"
+         :currentTile "tile"
+         :tileset nil})) ; we'll use this later to all users to switch between tile types
 
 ; generates a representation of the canvas - we can use this to track which squares have been
 ; filled in so that we can modify which wall tile to place accotdingly
@@ -35,7 +38,31 @@
   (swap! canvas-properties conj {:painting false}))
 
 (defn get-tile-value []
-  1) ; return 1 for a floor tile
+  (cond
+    (= (:tileType @canvas-properties) "floor") 1
+    (= (:tileType @canvas-properties) "wall") 2)) ; return 1 for a floor tile
+
+(defn handle-wall-orientation [y x] ; y first as locicallit it's -> y down x
+  (if (= (:tileType @canvas-properties) "wall")
+    (let [wallMap {:left   (walls/check-left y x @canvas-rep ) ; creates a map of the direction the floor tiles are
+                   :right  (walls/check-right y x @canvas-rep)
+                   :top    (walls/check-top y x @canvas-rep )
+                   :bottom (walls/check-bottom y x @canvas-rep )
+                   :tright (walls/check-tright-corner y x @canvas-rep)
+                   :bright (walls/check-bright-corner y x @canvas-rep)
+                   :tleft  (walls/check-tleft-corner y x @canvas-rep)
+                   :bleft  (walls/check-bleft-corner y x @canvas-rep)}]
+
+      (cond
+        (:left wallMap) "wall_tile_right"
+        (:right wallMap) "wall_tile_left"
+        (:top wallMap) "wall_tile_bottom"
+        (:bottom wallMap) "wall_tile_top"
+        (:tright wallMap) "wall_tile_corner_tright"
+        (:bright wallMap) "wall_tile_corner_bright"
+        (:tleft wallMap) "wall_tile_corner_tleft"
+        (:bleft wallMap) "wall_tile_corner_bleft"))
+      (:currentTile @canvas-properties))) ; end of if - we are just placing floors
 
 (defn update-canvas-rep [x y]
   (swap! canvas-rep update-in [(/ y 50) (/ x 50)] get-tile-value))
@@ -46,8 +73,9 @@
     (.persist event)
     (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
     (def ctx (.getContext canvas "2d"))
-    (let [imgObj (js/Image.)]
-      (aset imgObj "src" (str "../"(:currentTile @canvas-properties)".jpg"))
+    (let [imgObj (js/Image.)
+          imgSrc (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50))]
+      (aset imgObj "src" (str "../"imgSrc".jpg"))
       (aset imgObj "onload" (fn []
         (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
                            (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))
@@ -102,7 +130,7 @@
         :reagent-render        ;; Note:  is not :render
          (fn []           ;; remember to repeat parameters
           [:div.Stage
-            (print @canvas-rep)
+            ; (print @canvas-rep)
             [Controls canvas-properties]
             [:div.canvasParent
               [:canvas#Canvas {:width "3000px" :height "3000px"
