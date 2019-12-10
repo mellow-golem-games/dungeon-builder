@@ -11,7 +11,7 @@
          :paint-mode true
          :tileType "floor"
          :currentTile "tile"
-         :tileset nil})) ; we'll use this later to all users to switch between tile types
+         :tileset "basic"})) ; we'll use this later to all users to switch between tile types
 
 ; generates a representation of the canvas - we can use this to track which squares have been
 ; filled in so that we can modify which wall tile to place accotdingly
@@ -74,8 +74,9 @@
     (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
     (def ctx (.getContext canvas "2d"))
     (let [imgObj (js/Image.)
+          tileset (:tileset @canvas-properties)
           imgSrc (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50))]
-      (aset imgObj "src" (str "../"imgSrc".jpg"))
+      (aset imgObj "src" (str "../tiles/"tileset"/"imgSrc".jpg"))
       (aset imgObj "onload" (fn []
         (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
                            (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))

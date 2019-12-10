@@ -41,6 +41,29 @@ body.hide-scroll .Main {
   border: 4px solid lightBlue;
 }
 
+.Control_overlay {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: -105vh;
+  background: rgba(0,0,0,0.25);
+  transition: all .25s;
+  z-index: 500;
+}
+
+.Control_overlay.active {
+  top: 0;
+}
+
+.tileGroup {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tileGroup h3 {
+  width: 100%;
+}
+
 .Stage {
   height: 100vh;
   width: 100%;

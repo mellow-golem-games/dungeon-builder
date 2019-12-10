@@ -1,5 +1,6 @@
 (ns dungeon-builder.scripts.walls)
-
+; functions that handle the wall tile we're going to place
+; determines where floors our and returns bools based on their current positiions
 
 (defn check-left [y x canvas-rep ]
   (if (and
