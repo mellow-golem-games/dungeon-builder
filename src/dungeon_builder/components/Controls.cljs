@@ -1,5 +1,4 @@
-(ns dungeon-builder.components.Controls
-  (:require [dungeon-builder.components.Walls :refer [Walls]]))
+(ns dungeon-builder.components.Controls)
 
 (defn pause-zoom [props]
   (swap! props conj {:paint-mode true})
