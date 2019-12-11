@@ -35,10 +35,27 @@ body.hide-scroll .Main {
 
 .Controls {
   height: 75px;
+  display: flex;
+  color: white;
+  background: #47484a;
 }
 
+.ControlItem {
+  text-align: center;
+}
+
+.ControlItem p {
+  margin: 0;
+  font-size: 12px;
+}
+
+
 .Controls img.active {
-  border: 4px solid lightBlue;
+  border: 4px solid #386bd2;
+}
+
+.Controls img {
+  border: 4px solid transparent;
 }
 
 .Control_overlay {
