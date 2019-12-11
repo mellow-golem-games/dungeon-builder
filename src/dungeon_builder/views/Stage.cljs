@@ -9,6 +9,7 @@
   (atom {:panRef nil
          :painting false
          :paint-mode true
+         :erase-mode false
          :tileType "floor"
          :currentTile "tile"
          :tileset "basic"})) ; we'll use this later to all users to switch between tile types
@@ -31,7 +32,7 @@
 (def canvas-rep (atom (generate-canvas-rep)))
 
 (defn start-paint []
-  (if (:paint-mode @canvas-properties)
+  (if (or (:paint-mode @canvas-properties) (:erase-mode @canvas-properties))
     (swap! canvas-properties conj {:painting true})))
 
 (defn end-paint []
@@ -68,21 +69,34 @@
   (swap! canvas-rep update-in [(/ y 50) (/ x 50)] get-tile-value))
 
 (defn paint-to-canvas [event]
+  (.persist event)
   (if (and (:painting @canvas-properties) (:paint-mode @canvas-properties))
-  (do
-    (.persist event)
-    (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
-    (def ctx (.getContext canvas "2d"))
-    (let [imgObj (js/Image.)
-          tileset (:tileset @canvas-properties)
-          imgSrc (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50))]
-      (aset imgObj "src" (str "../tiles/"tileset"/"imgSrc".jpg"))
-      (aset imgObj "onload" (fn []
-        (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
-                           (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))
-        (.drawImage ctx imgObj
-                               (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
-                               (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))))))))
+    (do
+      (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
+      (def ctx (.getContext canvas "2d"))
+      (let [imgObj (js/Image.)
+            tileset (:tileset @canvas-properties)
+            imgSrc (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50))]
+        (aset imgObj "src" (str "../tiles/"tileset"/"imgSrc".jpg"))
+        (aset imgObj "onload" (fn []
+          (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
+                             (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))
+          (.drawImage ctx imgObj
+                                 (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
+                                 (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))))))
+   (if (and (:painting @canvas-properties) (:erase-mode @canvas-properties))
+    (let [x (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
+          y (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50))]
+      (.clearRect ctx x y 50 50) ; clears our rectangle of the current Image
+
+      ; since we clear the whole rectangle we need to then redraw the line or they'll be missing afterwards
+      (.beginPath ctx)
+      (.moveTo ctx x y)
+      (.lineTo ctx (+ 50 x) y)
+      (.lineTo ctx (+ 50 x) (+ 50 y))
+      (.lineTo ctx x (+ 50 y))
+      (.lineTo ctx x y)
+      (.stroke ctx)))))
 
 
 (defn render-canvas []
