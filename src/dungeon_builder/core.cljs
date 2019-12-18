@@ -1,6 +1,5 @@
 (ns dungeon-builder.core
     (:require [reagent.core :as reagent :refer [atom]]
-              [dungeon-builder.views.page :as page]
               [dungeon-builder.views.Stage :refer [Stage]]
               [dungeon-builder.services.state.global :refer [app-state]]
               [dungeon-builder.services.state.dispatcher :refer [handle-state-change]]))

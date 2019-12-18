@@ -68,6 +68,11 @@
 (defn update-canvas-rep [x y]
   (swap! canvas-rep update-in [(/ y 50) (/ x 50)] get-tile-value))
 
+(defn get-random-tile [current-tile]
+  (if (= current-tile "tile")
+    (str current-tile "-" (rand-int 3))
+    current-tile))
+
 (defn paint-to-canvas [event]
   (.persist event)
   (if (and (:painting @canvas-properties) (:paint-mode @canvas-properties))
@@ -76,7 +81,7 @@
       (def ctx (.getContext canvas "2d"))
       (let [imgObj (js/Image.)
             tileset (:tileset @canvas-properties)
-            imgSrc (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50))]
+            imgSrc (get-random-tile (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50)))]
         (aset imgObj "src" (str "../tiles/"tileset"/"imgSrc".jpg"))
         (aset imgObj "onload" (fn []
           (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
