@@ -73,6 +73,13 @@
     (str current-tile "-" (rand-int 3))
     current-tile))
 
+(defn get-img-src [event]
+  ; first we should determine the orientation of the wall
+  ; then we should determine if it is a small wall or a big wall
+  ; last we should randomize the number if the selection is a tile
+    (get-random-tile (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50)))
+  )
+
 (defn paint-to-canvas [event]
   (.persist event)
   (if (and (:painting @canvas-properties) (:paint-mode @canvas-properties))
@@ -81,7 +88,8 @@
       (def ctx (.getContext canvas "2d"))
       (let [imgObj (js/Image.)
             tileset (:tileset @canvas-properties)
-            imgSrc (get-random-tile (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50)))]
+            ; create a new get tile src functioin
+            imgSrc (get-img-src event)]
         (aset imgObj "src" (str "../tiles/"tileset"/"imgSrc".jpg"))
         (aset imgObj "onload" (fn []
           (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
@@ -157,5 +165,3 @@
                                :on-mouseDown #((do (start-paint) (paint-to-canvas (-> %)))) ; needed so a single click still works
                                :on-mouseUp #(end-paint)
                                :on-mouseMove #(paint-to-canvas (-> %))}]]])}))
-
-

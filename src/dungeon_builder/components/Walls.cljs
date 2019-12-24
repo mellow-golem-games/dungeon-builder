@@ -11,6 +11,10 @@
                :src "../tiles/basic/tile.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor")}]
         [:p "Floor"]]
       [:div.tileGroup__group
+        [:img {:class (if (= (:currentTile @canvas-properties) "small_wall") "active")
+               :src "../tiles/basic/small_wall.jpg" :on-click #(on-wall-select canvas-properties "small_wall" "tile")}]
+        [:p "wall"]]
+      [:div.tileGroup__group
         [:img {:class (if (= (:currentTile @canvas-properties) "wall_tile_left") "active")
                :src "../tiles/basic/wall_tile_left.jpg" :on-click #(on-wall-select canvas-properties "wall_tile_left" "wall")}]
         [:p "wall"]]]
