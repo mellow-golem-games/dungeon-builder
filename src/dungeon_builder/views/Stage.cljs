@@ -3,6 +3,8 @@
             [dungeon-builder.components.Controls :refer [Controls]]
             [dungeon-builder.services.state.dispatcher :refer [handle-state-change]]
             [dungeon-builder.scripts.walls :as walls]
+            [dungeon-builder.scripts.terrain :as terrain]
+            [clojure.string :as str]
             ["panzoom" :as panzoom]))
 
 (def canvas-properties
@@ -80,23 +82,48 @@
     (get-random-tile (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50)))
   )
 
+(defn draw-img-to-canvas [ctx imgObj event]
+  (if (= "small_wall" (:tileType @canvas-properties))
+    (do
+      (.drawImage ctx imgObj
+                             (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
+                             (- (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 2))
+    )
+    (.drawImage ctx imgObj
+                           (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
+                           (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))
+  )
+)
+
+(defn draw-terrain-img-to-canvas [event]
+  ;(js/alert "test")
+  (let [imgObj (js/Image.)
+        imgSrc (get-img-src event)
+        canvas (.getElementById js/document "Canvas")
+        ctx (.getContext canvas "2d")]
+
+    ; TODO turn this into a cond if the terrain types grows
+    ; (print (:currentTile @canvas-properties))
+    (if (str/includes? (:currentTile @canvas-properties) "door")
+      (terrain/draw-door ctx event imgObj @canvas-properties))))
+
 (defn paint-to-canvas [event]
   (.persist event)
   (if (and (:painting @canvas-properties) (:paint-mode @canvas-properties))
-    (do
-      (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
-      (def ctx (.getContext canvas "2d"))
-      (let [imgObj (js/Image.)
-            tileset (:tileset @canvas-properties)
-            ; create a new get tile src functioin
-            imgSrc (get-img-src event)]
-        (aset imgObj "src" (str "../tiles/"tileset"/"imgSrc".jpg"))
-        (aset imgObj "onload" (fn []
-          (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
-                             (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))
-          (.drawImage ctx imgObj
-                                 (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
-                                 (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))))))
+    (if (= (:tileType @canvas-properties) "terrain")
+      (draw-terrain-img-to-canvas event)
+      (do
+        (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
+        (def ctx (.getContext canvas "2d"))
+        (let [imgObj (js/Image.)
+              tileset (:tileset @canvas-properties)
+              ; create a new get tile src functioin
+              imgSrc (get-img-src event)]
+          (aset imgObj "src" (str "../tiles/"tileset"/"imgSrc".jpg"))
+          (aset imgObj "onload" (fn []
+            (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
+                               (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))
+            (draw-img-to-canvas ctx imgObj event))))))
    (if (and (:painting @canvas-properties) (:erase-mode @canvas-properties))
     (let [x (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
           y (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50))]
