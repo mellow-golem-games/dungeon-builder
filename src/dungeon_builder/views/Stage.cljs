@@ -96,14 +96,12 @@
 )
 
 (defn draw-terrain-img-to-canvas [event]
-  ;(js/alert "test")
   (let [imgObj (js/Image.)
         imgSrc (get-img-src event)
         canvas (.getElementById js/document "Canvas")
         ctx (.getContext canvas "2d")]
 
     ; TODO turn this into a cond if the terrain types grows
-    ; (print (:currentTile @canvas-properties))
     (if (str/includes? (:currentTile @canvas-properties) "door")
       (terrain/draw-door ctx event imgObj @canvas-properties))))
 
