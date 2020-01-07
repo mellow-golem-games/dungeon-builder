@@ -32,6 +32,7 @@
       (recur (+ x 50) (conj canvas-build canvas-row-values))))))
 
 (def canvas-rep (atom (generate-canvas-rep)))
+(def canvas-terrain-rep (atom (generate-canvas-rep))) ; this holds our state for walls/doors/other terrain
 
 (defn start-paint []
   (if (or (:paint-mode @canvas-properties) (:erase-mode @canvas-properties))
@@ -83,17 +84,9 @@
   )
 
 (defn draw-img-to-canvas [ctx imgObj event]
-  (if (= "small_wall" (:tileType @canvas-properties))
-    (do
-      (.drawImage ctx imgObj
-                             (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
-                             (- (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 2))
-    )
     (.drawImage ctx imgObj
-                           (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
-                           (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))
-  )
-)
+      (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
+      (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50))))
 
 (defn draw-terrain-img-to-canvas [event]
   (let [imgObj (js/Image.)
@@ -101,9 +94,10 @@
         canvas (.getElementById js/document "Canvas")
         ctx (.getContext canvas "2d")]
 
-    ; TODO turn this into a cond if the terrain types grows
+    ; TODO turn this into a cond for now we only have 2 terrain types though
     (if (str/includes? (:currentTile @canvas-properties) "door")
-      (terrain/draw-door ctx event imgObj @canvas-properties))))
+      (terrain/draw-door ctx event imgObj @canvas-properties)
+      (terrain/draw-terrain-wall ctx event imgObj @canvas-properties))))
 
 (defn paint-to-canvas [event]
   (.persist event)
