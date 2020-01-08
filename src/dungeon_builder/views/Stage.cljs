@@ -18,7 +18,9 @@
 
 ; generates a representation of the canvas - we can use this to track which squares have been
 ; filled in so that we can modify which wall tile to place accotdingly
-(defn generate-canvas-rep []
+(defn generate-canvas-rep [type]
+  "Note that this takes a type as the rep for tile and terrain need to be different
+   a given square can only have 'tile' but multiple pieces of 'terrain' i.e a wall and door"
   (loop [x 50
          canvas-build []]
     (let [canvas-row-values
@@ -26,13 +28,13 @@
             canvas-build-inner []]
         (if (> y 3000)
           canvas-build-inner
-          (recur (+ y 50) (conj canvas-build-inner 0))))]
+          (recur (+ y 50) (conj canvas-build-inner (if (= type "tile") 0 [])))))]
     (if (> x 3000)
       canvas-build
       (recur (+ x 50) (conj canvas-build canvas-row-values))))))
 
-(def canvas-rep (atom (generate-canvas-rep)))
-(def canvas-terrain-rep (atom (generate-canvas-rep))) ; this holds our state for walls/doors/other terrain
+(def canvas-rep (atom (generate-canvas-rep "tile")))
+(def canvas-terrain-rep (atom (generate-canvas-rep "terrain"))) ; this holds our state for walls/doors/other terrain
 
 (defn start-paint []
   (if (or (:paint-mode @canvas-properties) (:erase-mode @canvas-properties))
@@ -45,6 +47,13 @@
   (cond
     (= (:tileType @canvas-properties) "floor") 1
     (= (:tileType @canvas-properties) "wall") 2)) ; return 1 for a floor tile
+
+(defn get-tile-value-terrain []
+  (cond
+    (= (:currentTile @canvas-properties) "small_wall")      1
+    (= (:currentTile @canvas-properties) "small_wall_side") 2
+    (= (:currentTile @canvas-properties) "door_tall")       3
+    (= (:currentTile @canvas-properties) "door_long")       4))
 
 (defn handle-wall-orientation [y x] ; y first as locicallit it's -> y down x
   (if (= (:tileType @canvas-properties) "wall")
@@ -68,8 +77,15 @@
         (:bleft wallMap) "wall_tile_corner_bleft"))
       (:currentTile @canvas-properties))) ; end of if - we are just placing floors
 
+; it might makes sense to make this one function but i think breaking them aparat is okay since
+; we may want to add additional stuff to terrain later, not sure but this gives flexibility at
+; very little maintence cost
 (defn update-canvas-rep [x y]
   (swap! canvas-rep update-in [(/ y 50) (/ x 50)] get-tile-value))
+
+(defn update-cavas-terrain-rep [x y tileValue]
+  ; we conj into the vector so a tile can have multiple pieces of terrain like a door and a wall!
+  (swap! canvas-terrain-rep update-in [(/ y 50) (/ x 50)] conj (get-tile-value-terrain)))
 
 (defn get-random-tile [current-tile]
   (if (= current-tile "tile")
@@ -96,8 +112,8 @@
 
     ; TODO turn this into a cond for now we only have 2 terrain types though
     (if (str/includes? (:currentTile @canvas-properties) "door")
-      (terrain/draw-door ctx event imgObj @canvas-properties)
-      (terrain/draw-terrain-wall ctx event imgObj @canvas-properties))))
+      (terrain/draw-door ctx event imgObj @canvas-properties update-cavas-terrain-rep)
+      (terrain/draw-terrain-wall ctx event imgObj @canvas-properties update-cavas-terrain-rep))))
 
 (defn paint-to-canvas [event]
   (.persist event)
