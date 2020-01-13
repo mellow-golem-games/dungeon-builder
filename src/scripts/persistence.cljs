@@ -34,5 +34,7 @@
              (print result))))
         (js/alert "Name Not Unique"))))))
 
-(defn load-map [name]
-  "Loads a given map by name")
+(defn load-maps []
+  "Loads a given map by name"
+  (print "test")
+  (get-current-state))

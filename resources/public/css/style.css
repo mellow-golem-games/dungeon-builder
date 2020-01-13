@@ -121,3 +121,19 @@ body.hide-scroll .Main {
   top: 0px;
 }
 
+
+.LoadOverlay {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  top: calc(-105% - 100px);
+  left: 0;
+  transition: all .25s;
+  background: white;
+  z-index: 600;
+}
+
+.LoadOverlay.active {
+  top: 0px;
+}
+
