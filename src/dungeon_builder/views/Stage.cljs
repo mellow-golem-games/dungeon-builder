@@ -1,6 +1,7 @@
 (ns dungeon-builder.views.Stage
   (:require [reagent.core :as reagent :refer [atom]]
             [dungeon-builder.components.Controls :refer [Controls]]
+            [dungeon-builder.components.SaveOverlay :refer [SaveOverlay]]
             [dungeon-builder.services.state.dispatcher :refer [handle-state-change]]
             [dungeon-builder.scripts.walls :as walls]
             [dungeon-builder.scripts.terrain :as terrain]
@@ -195,6 +196,7 @@
           [:div.Stage
             ; (print @canvas-rep)
             [Controls canvas-properties]
+            [SaveOverlay false canvas-rep canvas-terrain-rep]
             [:div.canvasParent
               [:canvas#Canvas {:width "3000px" :height "3000px"
                                :on-mouseDown #((do (start-paint) (paint-to-canvas (-> %)))) ; needed so a single click still works
