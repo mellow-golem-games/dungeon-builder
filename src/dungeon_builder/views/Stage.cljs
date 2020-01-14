@@ -177,7 +177,29 @@
           (recur (+ x 50)))))))
 
 
-(defn Stage []
+;TODO let's move these to a script to keep them all together and not make this file too Big
+
+
+(defn map-load-paint-tiles [tile-map]
+  (doseq [row tile-map]
+    (doseq [row-item row]
+      ; TODO we'll need to go back and add meta data to this so we know which type of tileset and tile to draw
+      (if (= row-item 1)
+        )
+    ))
+)
+
+(defn map-load-paint-terrain [terrain-map]
+  ; (print terrain-map)
+)
+
+(defn handle-on-map-load [loaded-map]
+  "handles painting the loaded map to the canvas"
+  (map-load-paint-tiles (:tile-state loaded-map))
+  (map-load-paint-terrain (:terrain-state loaded-map)))
+
+
+(defn Stage [loaded-map]
   (reagent/create-class                 ;; <-- expects a map of functions
     {:display-name  "canvas"      ;; for more helpful warnings & errors
 
@@ -194,7 +216,8 @@
         :reagent-render        ;; Note:  is not :render
          (fn []           ;; remember to repeat parameters
           [:div.Stage
-            ; (print @canvas-rep)
+            (if @loaded-map
+              (handle-on-map-load @loaded-map))
             [Controls canvas-properties]
             [SaveOverlay false canvas-rep canvas-terrain-rep]
             [:div.canvasParent

@@ -8,11 +8,12 @@
 (enable-console-print!)
 
 (def view-state (atom "home"))
+(def loaded-map-atom (atom nil)) ; we use this to load a map and then force it down to the Stage
 
 (defn core []
   [:div.Main
-    [Home view-state]
-    [Stage]])
+    [Home view-state loaded-map-atom]
+    [Stage loaded-map-atom]])
 
 (reagent/render-component [core]
                           (. js/document (getElementById "app")))

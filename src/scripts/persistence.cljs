@@ -21,7 +21,7 @@
       true
       false)))
 
-
+; TODO we need to make the terrain state unique either here or on population
 (defn save-map [name tile-state terrain-state]
   "Takes our map name state and saves it localstorage/SqlLite"
   (.then (get-current-state) (fn [value]
@@ -36,5 +36,4 @@
 
 (defn load-maps []
   "Loads a given map by name"
-  (print "test")
   (get-current-state))
