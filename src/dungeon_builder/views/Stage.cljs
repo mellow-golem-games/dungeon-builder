@@ -181,12 +181,45 @@
 
 
 (defn map-load-paint-tiles [tile-map]
-  (doseq [row tile-map]
-    (doseq [row-item row]
-      ; TODO we'll need to go back and add meta data to this so we know which type of tileset and tile to draw
-      (if (= row-item 1)
-        )
-    ))
+
+  ; loop through each row
+  ; for each row we need to look at each item
+  ; 0 do nothing
+  ; if it's a 1 then we need to check the index of outter and inner loop and draw it
+  ; may need to use loop/recur as I don;t know if for or doseq gives us index info
+  ; (print (drop 1 tile-map))
+  (loop [rowIndex 0
+         tiles tile-map]
+    (if (> (count tiles) 0)
+      (do
+        (loop [innerRowIndex 0
+               tileRow (nth tiles 0)]
+          (if (> (count tileRow) 0)
+            (do
+              (if (= 1 (nth tileRow 0))
+                (do
+                  (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
+                  (def ctx (.getContext canvas "2d"))
+                  (let [imgObj (js/Image.)]
+                    (aset imgObj "src" (str "../tiles/basic/tile-1.jpg"))
+                    (aset imgObj "onload" (fn []
+                      (.drawImage ctx imgObj
+                        (* 50 innerRowIndex)
+                        (* 50 rowIndex)))))))
+
+
+
+              (recur (+ 1 innerRowIndex) (drop 1 tileRow)))
+            ))
+        (recur (+ 1 rowIndex) (drop 1 tiles)))
+      (print "done")))
+
+  ; (doseq [row tile-map]
+  ;   (doseq [row-item row]
+  ;     ; TODO we'll need to go back and add meta data to this so we know which type of tileset and tile to draw
+  ;     ; (if (= row-item 1)
+  ;     ;   )
+  ;   ))
 )
 
 (defn map-load-paint-terrain [terrain-map]
