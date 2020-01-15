@@ -17,11 +17,10 @@
          :currentTile "tile"
          :tileset "basic"})) ; we'll use this later to all users to switch between tile types
 
-; generates a representation of the canvas - we can use this to track which squares have been
-; filled in so that we can modify which wall tile to place accotdingly
+
 (defn generate-canvas-rep [type]
-  "Note that this takes a type as the rep for tile and terrain need to be different
-   a given square can only have 'tile' but multiple pieces of 'terrain' i.e a wall and door"
+  "generates a representation of the canvas - we can use this to track which squares have been
+  filled in so that we can modify which wall tile to place accotdingly"
   (loop [x 50
          canvas-build []]
     (let [canvas-row-values
@@ -29,7 +28,7 @@
             canvas-build-inner []]
         (if (> y 3000)
           canvas-build-inner
-          (recur (+ y 50) (conj canvas-build-inner (if (= type "tile") 0 [])))))]
+          (recur (+ y 50) (conj canvas-build-inner (if (= type "terrain") [] {})))))]
     (if (> x 3000)
       canvas-build
       (recur (+ x 50) (conj canvas-build canvas-row-values))))))
@@ -66,7 +65,7 @@
                    :bright (walls/check-bright-corner y x @canvas-rep)
                    :tleft  (walls/check-tleft-corner y x @canvas-rep)
                    :bleft  (walls/check-bleft-corner y x @canvas-rep)}]
-
+      (print wallMap)
       (cond
         (:left wallMap) "wall_tile_right"
         (:right wallMap) "wall_tile_left"
@@ -78,11 +77,15 @@
         (:bleft wallMap) "wall_tile_corner_bleft"))
       (:currentTile @canvas-properties))) ; end of if - we are just placing floors
 
+(defn generate-tile-rep [imgSrc]
+  {:type (get-tile-value) :tileset (:tileset @canvas-properties) :tile-name imgSrc})
+
 ; it might makes sense to make this one function but i think breaking them aparat is okay since
 ; we may want to add additional stuff to terrain later, not sure but this gives flexibility at
 ; very little maintence cost
-(defn update-canvas-rep [x y]
-  (swap! canvas-rep update-in [(/ y 50) (/ x 50)] get-tile-value))
+(defn update-canvas-rep [x y imgSrc]
+  ; e.x object {:type (or 1 0)  :tileset "basic" :tile-name  tile-1.jpg (this is the random part)}
+  (swap! canvas-rep update-in [(/ y 50) (/ x 50)] conj (generate-tile-rep imgSrc)))
 
 (defn update-cavas-terrain-rep [x y tileValue]
   ; we conj into the vector so a tile can have multiple pieces of terrain like a door and a wall!
@@ -131,7 +134,8 @@
           (aset imgObj "src" (str "../tiles/"tileset"/"imgSrc".jpg"))
           (aset imgObj "onload" (fn []
             (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))
-                               (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)))
+                               (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50))
+                               imgSrc)
             (draw-img-to-canvas ctx imgObj event))))))
    (if (and (:painting @canvas-properties) (:erase-mode @canvas-properties))
     (let [x (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50))

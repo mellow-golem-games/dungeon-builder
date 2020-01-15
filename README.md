@@ -6,31 +6,23 @@ FIXME: Write a one-line description of your library/project.
 
 FIXME: Write a paragraph about the library/project and highlight its goals.
 
-## Setup
+## DEV
 
-To get an interactive development environment run:
+Load flow:
 
-    lein figwheel
 
-and open your browser at [localhost:3449](http://localhost:3449/).
-This will auto compile and send all changes to the browser without the
-need to reload. After the compilation process is complete, you will
-get a Browser Connected REPL. An easy way to try it is:
+2. Rework wall tile finder to working with new map object and not array
 
-    (js/alert "Am I connected?")
 
-and you should see an alert in the browser window.
+3. rework on load to handle the new map and not just vector
 
-To clean all compiled files:
 
-    lein clean
+4. set so terrain is a unique set - no duplicates
 
-To create a production build run:
 
-    lein do clean, cljsbuild once min
+5. load function draws terrain
 
-And open your browser in `resources/public/index.html`. You will not
-get live reloading, nor a REPL.
+
 
 ## License
 
