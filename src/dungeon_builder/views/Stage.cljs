@@ -17,7 +17,7 @@
          :currentTile "tile"
          :tileset "basic"})) ; we'll use this later to all users to switch between tile types
 
-
+; we pass a type as the terrain and tile maps are different
 (defn generate-canvas-rep [type]
   "generates a representation of the canvas - we can use this to track which squares have been
   filled in so that we can modify which wall tile to place accotdingly"
@@ -55,6 +55,13 @@
     (= (:currentTile @canvas-properties) "door_tall")       3
     (= (:currentTile @canvas-properties) "door_long")       4))
 
+(defn get-tile-value-terrain-load [val]
+  (cond
+    (= val 1) "small_wall"
+    (= val 2) "small_wall_side"
+    (= val 3) "door_tall"
+    (= val 4) "door_long"))
+
 (defn handle-wall-orientation [y x] ; y first as locicallit it's -> y down x
   (if (= (:tileType @canvas-properties) "wall")
     (let [wallMap {:left   (walls/check-left y x @canvas-rep ) ; creates a map of the direction the floor tiles are
@@ -65,7 +72,6 @@
                    :bright (walls/check-bright-corner y x @canvas-rep)
                    :tleft  (walls/check-tleft-corner y x @canvas-rep)
                    :bleft  (walls/check-bleft-corner y x @canvas-rep)}]
-      (print wallMap)
       (cond
         (:left wallMap) "wall_tile_right"
         (:right wallMap) "wall_tile_left"
@@ -182,16 +188,10 @@
 
 
 ;TODO let's move these to a script to keep them all together and not make this file too Big
-
-
+; This is another place where we could probably combine but ill leave apart for future additions and it's
+; easier - im lazy!
 (defn map-load-paint-tiles [tile-map]
-
-  ; loop through each row
-  ; for each row we need to look at each item
-  ; 0 do nothing
-  ; if it's a 1 then we need to check the index of outter and inner loop and draw it
-  ; may need to use loop/recur as I don;t know if for or doseq gives us index info
-  ; (print (drop 1 tile-map))
+  "paints map tiles to the canvas"
   (loop [rowIndex 0
          tiles tile-map]
     (if (> (count tiles) 0)
@@ -200,35 +200,57 @@
                tileRow (nth tiles 0)]
           (if (> (count tileRow) 0)
             (do
-              (if (= 1 (nth tileRow 0))
+              (if (or (= 1 (:type (nth tileRow 0))) (= 2 (:type (nth tileRow 0))))
                 (do
                   (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
                   (def ctx (.getContext canvas "2d"))
                   (let [imgObj (js/Image.)]
-                    (aset imgObj "src" (str "../tiles/basic/tile-1.jpg"))
+                    (aset imgObj "src" (str "../tiles/basic/" (:tile-name (nth tileRow 0)) ".jpg"))
                     (aset imgObj "onload" (fn []
                       (.drawImage ctx imgObj
                         (* 50 innerRowIndex)
                         (* 50 rowIndex)))))))
-
-
-
-              (recur (+ 1 innerRowIndex) (drop 1 tileRow)))
-            ))
-        (recur (+ 1 rowIndex) (drop 1 tiles)))
-      (print "done")))
-
-  ; (doseq [row tile-map]
-  ;   (doseq [row-item row]
-  ;     ; TODO we'll need to go back and add meta data to this so we know which type of tileset and tile to draw
-  ;     ; (if (= row-item 1)
-  ;     ;   )
-  ;   ))
-)
+              (recur (+ 1 innerRowIndex) (drop 1 tileRow)))))
+        (recur (+ 1 rowIndex) (drop 1 tiles))))))
 
 (defn map-load-paint-terrain [terrain-map]
-  ; (print terrain-map)
-)
+  "paints terrain like doors to the canvas"
+  (loop [rowIndex 0
+         tiles terrain-map]
+    (if (> (count tiles) 0)
+      (do
+        (loop [innerRowIndex 0
+               tileRow (nth tiles 0)]
+          (if (> (count tileRow) 0)
+            (do
+              (if (> (count (distinct (nth tileRow 0))) 0)
+                (loop [terrainObj (distinct (nth tileRow 0))]
+                  (if (> (count terrainObj) 0)
+                    (do
+                      (let [imgObj (js/Image.)
+                            imgSrc (get-tile-value-terrain-load (nth terrainObj 0))
+                            canvas (.getElementById js/document "Canvas")
+                            ctx (.getContext canvas "2d")]
+                        (if (str/includes? imgSrc "door")
+                          (do
+                            (aset imgObj "src" (str "../tiles/terrain/"imgSrc".png"))
+                            (aset imgObj "onload" (fn []
+                              (if (str/includes? imgSrc "door_tall")
+                                (.drawImage ctx imgObj
+                                            (- (* 50 innerRowIndex) 5)
+                                            (+ (* 50 rowIndex) 12))
+                                (.drawImage ctx imgObj
+                                            (+ (* 50 innerRowIndex) 12)
+                                            (- (* 50 rowIndex) 5))))))
+                          (do
+                            (aset imgObj "src" (str "../tiles/terrain/"imgSrc".jpg"))
+                            (aset imgObj "onload" (fn []
+                              (.drawImage ctx imgObj
+                                (* 50 innerRowIndex)
+                                (- (* 50 rowIndex) 2)))))))
+                      (recur (drop 1 terrainObj))))))
+              (recur (+ 1 innerRowIndex) (drop 1 tileRow)))))
+      (recur (+ 1 rowIndex) (drop 1 tiles))))))
 
 (defn handle-on-map-load [loaded-map]
   "handles painting the loaded map to the canvas"
