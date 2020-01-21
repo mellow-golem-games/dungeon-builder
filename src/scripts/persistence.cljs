@@ -1,11 +1,7 @@
 (ns dungeon-builder.scripts.persistence)
 ; Handles saving and loading of the files
 
-; TODO create this as reference
-; (defrecord map-rep
-;   :name
-;   :tile-state
-    ;terrain-state)
+(defrecord map-rep [name tile-state terrain-state])
 
 (defn get-current-state []
   (.getItem (.-localforage js/window) "mgg-dungeonbuilder-maps"))

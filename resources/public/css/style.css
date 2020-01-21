@@ -40,6 +40,11 @@ body.hide-scroll .Main {
   background: #47484a;
 }
 
+.Controls__inner{
+  display: flex;
+  margin: 0 auto;
+}
+
 .ControlItem {
   text-align: center;
 }
@@ -64,8 +69,9 @@ body.hide-scroll .Main {
 
 .Controls svg {
   border: 4px solid transparent;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
 }
 
 .Control_overlay {
@@ -129,6 +135,14 @@ body.hide-scroll .Main {
 
 .Home.active {
   top: 0px;
+}
+
+.Home-button-wrapper button {
+  border: 1px solid black;
+  font-size: 16px;
+  padding: 4px 8px;
+  background: transparent;
+  text-transform: uppercase;
 }
 
 

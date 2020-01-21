@@ -13,7 +13,7 @@
 (defn core []
   [:div.Main
     [Home view-state loaded-map-atom]
-    [Stage loaded-map-atom]])
+    [Stage loaded-map-atom view-state]])
 
 (reagent/render-component [core]
                           (. js/document (getElementById "app")))

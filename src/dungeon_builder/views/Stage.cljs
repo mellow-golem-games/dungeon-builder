@@ -93,7 +93,7 @@
   ; e.x object {:type (or 1 0)  :tileset "basic" :tile-name  tile-1.jpg (this is the random part)}
   (swap! canvas-rep update-in [(/ y 50) (/ x 50)] conj (generate-tile-rep imgSrc)))
 
-(defn update-cavas-terrain-rep [x y tileValue]
+(defn update-cavas-terrain-rep [x y]
   ; we conj into the vector so a tile can have multiple pieces of terrain like a door and a wall!
   (swap! canvas-terrain-rep update-in [(/ y 50) (/ x 50)] conj (get-tile-value-terrain)))
 
@@ -190,6 +190,10 @@
 ;TODO let's move these to a script to keep them all together and not make this file too Big
 ; This is another place where we could probably combine but ill leave apart for future additions and it's
 ; easier - im lazy!
+
+; TODO might want to look and see if we can remove some of these 'do's
+; they made it a bit easier to developer with prints but make the code overall
+; a bit less readable 
 (defn map-load-paint-tiles [tile-map]
   "paints map tiles to the canvas"
   (loop [rowIndex 0
@@ -258,7 +262,7 @@
   (map-load-paint-terrain (:terrain-state loaded-map)))
 
 
-(defn Stage [loaded-map]
+(defn Stage [loaded-map view-state]
   (reagent/create-class                 ;; <-- expects a map of functions
     {:display-name  "canvas"      ;; for more helpful warnings & errors
 
@@ -273,11 +277,11 @@
 
         ;; other lifecycle funcs can go in here
         :reagent-render        ;; Note:  is not :render
-         (fn []           ;; remember to repeat parameters
+         (fn [loaded-map view-state]           ;; remember to repeat parameters
           [:div.Stage
             (if @loaded-map
               (handle-on-map-load @loaded-map))
-            [Controls canvas-properties]
+            [Controls canvas-properties view-state]
             [SaveOverlay false canvas-rep canvas-terrain-rep]
             [:div.canvasParent
               [:canvas#Canvas {:width "3000px" :height "3000px"

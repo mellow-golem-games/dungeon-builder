@@ -18,11 +18,7 @@
                     (- (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom canvas-properties)) 50)) 5)))
         (update-canvas-rep
           (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom canvas-properties)) 50))
-          (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom canvas-properties)) 50))
-          1 ; TODO this should be the tile base on the cond above
-      )
-  )
-))
+          (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom canvas-properties)) 50))))))
 
 
 (defn draw-terrain-wall [ctx event imgObj canvas-properties update-canvas-rep]
@@ -36,7 +32,4 @@
       (- (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom canvas-properties)) 50)) 2))
     (update-canvas-rep
       (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom canvas-properties)) 50))
-      (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom canvas-properties)) 50))
-      1 ; TODO this should be the tile base on the cond above
-  )
-)))
+      (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom canvas-properties)) 50))))))
