@@ -38,6 +38,7 @@ body.hide-scroll .Main {
   display: flex;
   color: white;
   background: #47484a;
+  z-index: 3;
 }
 
 .Controls__inner{
@@ -79,7 +80,8 @@ body.hide-scroll .Main {
   width: 100vw;
   position: fixed;
   top: -105vh;
-  background: rgba(0,0,0,0.25);
+  left: 0;
+  background: rgba(0,0,0,0.75);
   transition: all .25s;
   z-index: 500;
 }
@@ -159,5 +161,24 @@ body.hide-scroll .Main {
 
 .LoadOverlay.active {
   top: 0px;
+}
+
+
+
+/* SAVE OVERLAY STUFF */
+
+.saveOverlay {
+  position: fixed;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  background: white;
+  z-index: -1;
+  transition: all .25s;
+}
+
+.saveOverlay.active {
+  z-index: 2;
+  top: 75px;
 }
 

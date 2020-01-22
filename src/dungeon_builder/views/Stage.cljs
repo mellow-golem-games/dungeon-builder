@@ -15,7 +15,8 @@
          :erase-mode false
          :tileType "floor"
          :currentTile "tile"
-         :tileset "basic"})) ; we'll use this later to all users to switch between tile types
+         :tileset "basic" ; we'll use this later to all users to switch between tile types
+         :show-save-overlay false}))
 
 ; we pass a type as the terrain and tile maps are different
 (defn generate-canvas-rep [type]
@@ -193,7 +194,7 @@
 
 ; TODO might want to look and see if we can remove some of these 'do's
 ; they made it a bit easier to developer with prints but make the code overall
-; a bit less readable 
+; a bit less readable
 (defn map-load-paint-tiles [tile-map]
   "paints map tiles to the canvas"
   (loop [rowIndex 0
@@ -282,7 +283,7 @@
             (if @loaded-map
               (handle-on-map-load @loaded-map))
             [Controls canvas-properties view-state]
-            [SaveOverlay false canvas-rep canvas-terrain-rep]
+            [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep]
             [:div.canvasParent
               [:canvas#Canvas {:width "3000px" :height "3000px"
                                :on-mouseDown #((do (start-paint) (paint-to-canvas (-> %)))) ; needed so a single click still works
