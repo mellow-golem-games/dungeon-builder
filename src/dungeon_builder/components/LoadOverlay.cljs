@@ -12,7 +12,7 @@
 
 (defn LoadOverlay [active loaded-map-atom hide-home-view]
   (let [name (atom "")
-        currentMaps (atom nil)] ; TODO Think we can safely remove
+        currentMaps (atom nil)]
     (load-current-maps currentMaps)
     (fn [active]
       [:div.LoadOverlay {:class (if active "active" "")}

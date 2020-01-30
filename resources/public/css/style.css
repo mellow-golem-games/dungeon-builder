@@ -84,6 +84,8 @@ body.hide-scroll .Main {
   background: rgba(0,0,0,0.75);
   transition: all .25s;
   z-index: 500;
+  padding: 15px;
+  box-sizing: border-box;
 }
 
 .Control_overlay.active {
@@ -93,10 +95,23 @@ body.hide-scroll .Main {
 .tileGroup {
   display: flex;
   flex-wrap: wrap;
+  text-align: center;
+}
+
+.tileGroup__group {
+  width: 60px;
+  height: 60px;
+  margin: 0 12px;
+  box-sizing: border-box;
+}
+
+.tileGroup__group.active {
+  border: 4px solid #386bd2;
 }
 
 .tileGroup h3 {
-  width: 100%;
+  width: 50%;
+  text-align: left;
 }
 
 .Stage {

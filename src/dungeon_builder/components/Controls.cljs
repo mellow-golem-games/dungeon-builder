@@ -22,9 +22,7 @@
   (swap! props conj {:erase-mode true :paint-mode false}))
 
 (defn handle-home [view-state]
-  (print @view-state)
-  (reset! view-state "home")
-  (print @view-state))
+  (reset! view-state "home"))
 
 (defn toggle-save-overlay [state]
   (swap! state conj {:show-save-overlay (not (:show-save-overlay @state))}))
