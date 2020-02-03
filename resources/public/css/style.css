@@ -45,6 +45,7 @@ body.hide-scroll .Main {
 .Controls__inner{
   display: flex;
   margin: 0 auto;
+  padding-top: 3px;
 }
 
 .ControlItem {
@@ -80,17 +81,22 @@ body.hide-scroll .Main {
   height: 100vh;
   width: 100vw;
   position: fixed;
-  top: -105vh;
+  top: -200vh;
   left: 0;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0,0,0,0.65);
   transition: all .25s;
   z-index: 500;
   padding: 15px;
   box-sizing: border-box;
+  overflow-y: scroll;
 }
 
 .Control_overlay.active {
   top: 0;
+}
+
+.Control_overlay_close {
+  margin-bottom: 30px;
 }
 
 .tileGroup {
@@ -181,7 +187,7 @@ body.hide-scroll .Main {
   position: fixed;
   height: 100vh;
   width: 100%;
-  top: calc(-105% - 100px);
+  top: calc(-115% - 100px);
   left: 0;
   transition: all .25s;
   background: white;
@@ -217,11 +223,29 @@ body.hide-scroll .Main {
   width: 100%;
   background: white;
   z-index: -1;
-  transition: all .25s;
+  transition: position .25s;
+  padding: 10px;
+  border-bottom: 1px solid black;
 }
 
 .saveOverlay.active {
   z-index: 2;
   top: 75px;
+}
+
+.saveOverlay button {
+  border: 1px solid black;
+  font-size: 18px;
+  padding: 4px 8px;
+  background: transparent;
+  text-transform: uppercase;
+}
+
+.saveOverlay input {
+  border: 1px solid orange;
+  font-size: 16px;
+  padding: 5px;
+  position: relative;
+  bottom: 1px;
 }
 
