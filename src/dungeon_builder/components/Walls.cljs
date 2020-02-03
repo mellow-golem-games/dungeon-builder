@@ -6,7 +6,6 @@
 ; think that might be it
 
 (defn Walls [on-wall-select canvas-properties control-settings toggle-walls]
-  (print @canvas-properties)
   [:div.Walls.Control_overlay {:class (if (:walls @control-settings) "active")}
     [:p {:on-click #(toggle-walls control-settings false)} "close"]
 

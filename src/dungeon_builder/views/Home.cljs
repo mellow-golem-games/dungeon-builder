@@ -14,7 +14,7 @@
   (let [showLoadOverlay (atom false)]
     (fn []
       [:div.Home {:class (if (= "home" @view-state) "active" "")}
-        [:div {:style {:width "100%"}}
+        [:div.Home-content-wrapper
           [:h1 "Dungeon Builder"]
         [:div.Home-button-wrapper
           [:button {:on-click #(new-map view-state)} "New Map"]

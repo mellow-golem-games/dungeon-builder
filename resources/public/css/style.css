@@ -148,10 +148,24 @@ body.hide-scroll .Main {
   justify-content: : center;
   align-items: center;
   text-align: center;
+  background-image: url('../sample.jpg');
+  background-size: cover;
+  background-position: center center;
 }
 
 .Home.active {
   top: 0px;
+}
+
+.Home-content-wrapper {
+  /* background-color: white; */
+  /* background-image: radial-gradient(circle closest-side, #f1f1f1, transparent); */
+  width: 100%;
+  background-color: rgba(255,255,255,.85);
+  margin: 0 auto;
+  padding-bottom: 20px;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
 }
 
 .Home-button-wrapper button {
