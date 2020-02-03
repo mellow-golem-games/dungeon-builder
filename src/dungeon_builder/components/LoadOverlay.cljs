@@ -15,7 +15,8 @@
         currentMaps (atom nil)]
     (load-current-maps currentMaps)
     (fn [active]
-      [:div.LoadOverlay {:class (if active "active" "")}
+      [:div.LoadOverlay {:class (if @active "active" "")}
+        [:p.LoadOverlay__close {:on-click #(reset! active false)}"close X"]
         [:h2 "Your Maps"]
           (for [map @currentMaps]
-            [:p {:key (:name map) :on-click #(handle-load-map map loaded-map-atom hide-home-view)} (:name map)])])))
+            [:p.MapButton {:key (:name map) :on-click #(handle-load-map map loaded-map-atom hide-home-view)} (:name map)])])))

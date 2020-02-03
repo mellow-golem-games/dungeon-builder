@@ -4,6 +4,7 @@ body, html {
   margin: 0;
   padding: 0;
   font-size: 16px;
+  font-family: 'Roboto Mono', monospace;
 }
 
 body.hide-scroll {
@@ -100,7 +101,6 @@ body.hide-scroll .Main {
 
 .tileGroup__group {
   width: 60px;
-  height: 60px;
   margin: 0 12px;
   box-sizing: border-box;
 }
@@ -161,7 +161,7 @@ body.hide-scroll .Main {
   /* background-color: white; */
   /* background-image: radial-gradient(circle closest-side, #f1f1f1, transparent); */
   width: 100%;
-  background-color: rgba(255,255,255,.85);
+  background-color: rgba(242,242,242,.90);
   margin: 0 auto;
   padding-bottom: 20px;
   border-top: 2px solid black;
@@ -170,7 +170,7 @@ body.hide-scroll .Main {
 
 .Home-button-wrapper button {
   border: 1px solid black;
-  font-size: 16px;
+  font-size: 18px;
   padding: 4px 8px;
   background: transparent;
   text-transform: uppercase;
@@ -190,6 +190,20 @@ body.hide-scroll .Main {
 
 .LoadOverlay.active {
   top: 0px;
+}
+
+.LoadOverlay__close {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+
+.LoadOverlay h2 {
+  margin-top: 60px;
+}
+
+.LoadOverlay .MapButton {
+  font-size: 20px;
 }
 
 
