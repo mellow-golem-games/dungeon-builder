@@ -31,7 +31,7 @@
                            :open-urls ["http://localhost:3449/index.html"]}
 
                 :compiler {:main dungeon-builder.core
-                           :npm-deps {:localforage "*" :panzoom "8.4.1"}
+                           :npm-deps {:panzoom "8.4.1"}
                            :install-deps true
                            :asset-path "js/compiled/out"
                            :output-to "resources/public/js/compiled/dungeon-builder.js"
@@ -47,7 +47,7 @@
                 :source-paths ["src"]
                 :compiler {:output-to "resources/public/js/compiled/dungeon-builder.js"
                            :main dungeon-builder.core
-                           :npm-deps {:localforage "*" :panzoom "8.4.1"}
+                           :npm-deps {:panzoom "8.4.1"}
                            :install-deps true
                            :optimizations :advanced
                            :pretty-print false}}]}
