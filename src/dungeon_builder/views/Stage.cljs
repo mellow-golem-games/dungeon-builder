@@ -159,6 +159,25 @@
       (.stroke ctx)))))
 
 
+(defn draw-canvas-lines []
+  (let [zoomElem (.querySelector js/document "#Canvas")
+        ctx (.getContext zoomElem "2d")]
+    (loop [x 50]
+      (if (> x 3000)
+        true
+        (do
+          (.beginPath ctx)
+          (.moveTo ctx 0 x)
+          (.lineTo ctx 3000 x)
+          (.stroke ctx)
+
+          (.beginPath ctx)
+          (.moveTo ctx x 0)
+          (.lineTo ctx x 3000)
+          (.stroke ctx)
+          (recur (+ x 50)))))))
+
+
 (defn render-canvas []
   (let [zoomElem (.querySelector js/document "#Canvas")
         ctx (.getContext zoomElem "2d")]
@@ -257,8 +276,16 @@
               (recur (+ 1 innerRowIndex) (drop 1 tileRow)))))
       (recur (+ 1 rowIndex) (drop 1 tiles))))))
 
+(defn clear-canvas []
+  (let [canvas (.getElementById js/document "Canvas")
+        ctx (.getContext canvas "2d")]
+    (.clearRect ctx 0 0 3000 3000)))
+
 (defn handle-on-map-load [loaded-map]
   "handles painting the loaded map to the canvas"
+  ; TODO we also need to reset and re-draw the map lines or it holds over
+  (clear-canvas)
+  (draw-canvas-lines)
   (map-load-paint-tiles (:tile-state loaded-map))
   (map-load-paint-terrain (:terrain-state loaded-map)))
 

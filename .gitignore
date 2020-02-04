@@ -12,3 +12,9 @@ pom.xml
 .lein-plugins/
 .repl
 .nrepl-port
+/node_modules
+/mobile/www/js
+/mobile/www/css
+/mobile/platforms
+/mobile/node_modules
+/mobile/plugins

@@ -7,7 +7,6 @@
   (persistence/save-map name tile-state terrain-state))
 
 (defn SaveOverlay [active tile-state terrain-state]
-  (print active)
   (let [name (atom "")]
     (fn [active tile-state terrain-state]
       [:div.saveOverlay {:class (if active "active" "")}
