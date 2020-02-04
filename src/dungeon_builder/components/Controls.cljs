@@ -10,9 +10,9 @@
   (swap! props conj {:paint-mode false :erase-mode false :currentTile "pan"})
   (.resume (:panRef @props)))
 
-(defn update-current-tile [props name type]
+(defn update-current-tile [props name type set]
   (pause-zoom props)
-  (swap! props conj {:currentTile name :tileType type :erase-mode false}))
+  (swap! props conj {:currentTile name :tileType type :tileset set :erase-mode false}))
 
 (defn toggle-walls [control-settings bool]
   (swap! control-settings conj {:walls bool}))
