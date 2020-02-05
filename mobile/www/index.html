@@ -1,49 +1,63 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
-    <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-    </body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link rel="icon" href="https://clojurescript.org/images/cljs-logo-icon-32.png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <h2>Figwheel template</h2>
+      <p>Checkout your developer console.</p>
+    </div>
+    <script src="cordova.js"></script>
+    <script src="localforage.min.js"></script>
+    <script src="js/compiled/dungeon-builder.js" type="text/javascript"></script>
+    <script>
+      document.addEventListener("deviceready", onDeviceReady, false);
+      function onDeviceReady() {
+        // FastClick.attach(document.body);
+
+        // localforage.defineDriver(window.cordovaSQLiteDriver).then(function() {
+        //   return localforage.setDriver([
+        //     // Try setting cordovaSQLiteDriver if available,
+        //     window.cordovaSQLiteDriver._driver,
+        //     // otherwise use one of the default localforage drivers as a fallback.
+        //     // This should allow you to transparently do your tests in a browser
+        //     localforage.INDEXEDDB,
+        //     localforage.WEBSQL,
+        //     localforage.LOCALSTORAGE
+        //   ]);
+        //   }).then(function() {
+        //      // alert(localforage.driver());
+        //     // this should alert "cordovaSQLiteDriver" when in an emulator or a device
+        //   });
+
+        if ( /(android)/i.test(navigator.userAgent) ) {
+          admobid = { // for Android
+            // banner: '',
+            // interstitial: ''
+          };
+        } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
+            admobid = { // for iOS
+              banner: 'ca-app-pub-7918336603285970/6699521906'
+            };
+          } else {
+              admobid = { // for Windows Phone
+                banner: '',
+                interstitial: ''
+              };
+          }
+
+          AdMob.createBanner({
+            adId: admobid.banner,
+            position: AdMob.AD_POSITION.BOTTOM_CENTER,
+            overlap: true,
+            autoShow : true
+          });
+      }
+    </script>
+  </body>
 </html>
