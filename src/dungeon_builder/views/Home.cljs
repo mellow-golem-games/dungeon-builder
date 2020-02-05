@@ -15,7 +15,7 @@
     (fn []
       [:div.Home {:class (if (= "home" @view-state) "active" "")}
         [:div.Home-content-wrapper
-          [:h1 "Dungeon Builder"]
+          [:h1 "Dungeon Maker"]
         [:div.Home-button-wrapper
           [:button {:on-click #(new-map view-state)} "New Map"]
           [:button {:on-click #(reset! showLoadOverlay true)} "Load Map"]]]
