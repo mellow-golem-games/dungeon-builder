@@ -30,7 +30,7 @@
                            ;; Comment this out once it no longer serves you.
                            :open-urls ["http://localhost:3449/index.html"]}
 
-                :compiler {:main dungeon-builder.core
+                :compiler {:main dungeon_builder.core
                            :npm-deps {:panzoom "8.4.1"}
                            :install-deps true
                            :asset-path "js/compiled/out"
@@ -46,10 +46,10 @@
                {:id "min"
                 :source-paths ["src"]
                 :compiler {:output-to "resources/public/js/compiled/dungeon-builder.js"
-                           :main dungeon-builder.core
+                           :main dungeon_builder.core
                            :npm-deps {:panzoom "8.4.1"}
                            :install-deps true
-                           :optimizations :advanced
+                           :optimizations :none
                            :pretty-print false}}]}
 
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
