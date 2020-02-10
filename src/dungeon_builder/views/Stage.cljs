@@ -229,7 +229,7 @@
                   (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
                   (def ctx (.getContext canvas "2d"))
                   (let [imgObj (js/Image.)]
-                    (aset imgObj "src" (str "./tiles/basic/" (:tile-name (nth tileRow 0)) ".jpg"))
+                    (aset imgObj "src" (str "./tiles/"(:tileset (nth tileRow 0))"/" (:tile-name (nth tileRow 0)) ".jpg"))
                     (aset imgObj "onload" (fn []
                       (.drawImage ctx imgObj
                         (* 50 innerRowIndex)
