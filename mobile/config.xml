@@ -31,4 +31,35 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
+    <icon density="mdpi" height="1024" platform="ios" src="res/icon/ios/icon.png" width="1024" />
+    <icon density="mdpi" height="120" platform="ios" src="res/icon/ios/icon-60-2x.png" width="120" />
+    <icon density="mdpi" height="114" platform="ios" src="res/icon/ios/icon-57-2x.png" width="114" />
+    <icon density="mdpi" height="57" platform="ios" src="res/icon/ios/icon-57.png" width="57" />
+    <icon density="mdpi" height="144" platform="ios" src="res/icon/ios/icon-72-2x.png" width="144" />
+    <icon density="mdpi" height="72" platform="ios" src="res/icon/ios/icon-72.png" width="72" />
+    <icon density="mdpi" height="180" platform="ios" src="res/icon/ios/icon-60-3x.png" width="180" />
+    <icon density="mdpi" height="29" platform="ios" src="res/icon/ios/icon-29.png" width="29" />
+    <icon density="mdpi" height="58" platform="ios" src="res/icon/ios/icon-29-2x.png" width="58" />
+    <icon density="mdpi" height="87" platform="ios" src="res/icon/ios/icon-29-3x.png" width="87" />
+    <icon density="mdpi" height="40" platform="ios" src="res/icon/ios/icon-40.png" width="40" />
+    <icon density="mdpi" height="80" platform="ios" src="res/icon/ios/icon-40-2x.png" width="80" />
+    <icon density="mdpi" height="76" platform="ios" src="res/icon/ios/icon-76.png" width="76" />
+    <icon density="mdpi" height="152" platform="ios" src="res/icon/ios/icon-76-2x.png" width="152" />
+    <icon density="mdpi" height="167" platform="ios" src="res/icon/ios/icon-83.5-2x.png" width="167" />
+    <icon density="mdpi" height="40" platform="ios" src="res/icon/ios/icon-20-2x.png" width="40" />
+    <icon density="mdpi" height="20" platform="ios" src="res/icon/ios/icon-20.png" width="20" />
+    <icon density="mdpi" height="100" platform="ios" src="res/icon/ios/icon-50-2x.png" width="100" />
+    <icon density="mdpi" height="50" platform="ios" src="res/icon/ios/icon-50.png" width="50" />
+    <splash height="960" src="res/screen/ios/screen-iphone-portrait-2x.png" width="640" />
+    <splash height="1136" src="res/screen/ios/screen-iphone-portrait-568h-2x.png" width="640" />
+    <splash height="480" src="res/screen/ios/screen-iphone-portrait.png" width="320" />
+    <splash height="2208" src="res/screen/ios/Default-736h.png" width="1242" />
+    <splash height="1334" src="res/screen/ios/Default-667h.png" width="750" />
+    <splash height="2436" src="res/screen/ios/iosxportrait.png" width="1125" />
+    <splash height="320" src="res/screen/ios/screen-iphone-landscape.png" width="480" />
+    <splash height="1536" src="res/screen/ios/screen-ipad-landscape-2x.png" width="2048" />
+    <splash height="768" src="res/screen/ios/screen-ipad-landscape.png" width="1024" />
+    <splash height="2048" src="res/screen/ios/screen-ipad-portrait-2x.png" width="1536" />
+    <splash height="1024" src="res/screen/ios/screen-ipad-portrait.png" width="768" />
+    <splash height="640" src="res/screen/ios/screen-iphone-landscape-2x.png" width="960" />
 </widget>
