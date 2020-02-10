@@ -237,6 +237,7 @@
               (recur (+ 1 innerRowIndex) (drop 1 tileRow)))))
         (recur (+ 1 rowIndex) (drop 1 tiles))))))
 
+;TODO clean up some of the do blocks here is also probably a good idea
 (defn map-load-paint-terrain [terrain-map]
   "paints terrain like doors to the canvas"
   (loop [rowIndex 0
@@ -277,15 +278,19 @@
       (recur (+ 1 rowIndex) (drop 1 tiles))))))
 
 (defn clear-canvas []
+  "clears, redraws lines, and resets our  state atoms"
   (let [canvas (.getElementById js/document "Canvas")
         ctx (.getContext canvas "2d")]
-    (.clearRect ctx 0 0 3000 3000)))
+    (.clearRect ctx 0 0 3000 3000))
+  (draw-canvas-lines)
+  (reset! canvas-rep (generate-canvas-rep "tile"))
+  (reset! canvas-terrain-rep (generate-canvas-rep "terrain")))
+
 
 (defn handle-on-map-load [loaded-map]
   "handles painting the loaded map to the canvas"
   ; TODO we also need to reset and re-draw the map lines or it holds over
   (clear-canvas)
-  (draw-canvas-lines)
   (map-load-paint-tiles (:tile-state loaded-map))
   (map-load-paint-terrain (:terrain-state loaded-map)))
 
@@ -296,20 +301,21 @@
 
       :component-did-mount               ;; the name of a lifecycle function
         (fn [this]
-          (render-canvas)
-          (println "component-did-mount")) ;; your implementation
+          (render-canvas))
 
        :component-did-update              ;; the name of a lifecycle function
         (fn [this old-argv]                ;; reagent provides you the entire "argv", not just the "props"
-          )
+        )
 
         ;; other lifecycle funcs can go in here
         :reagent-render        ;; Note:  is not :render
          (fn [loaded-map view-state]           ;; remember to repeat parameters
           [:div.Stage
             (if @loaded-map
-              (handle-on-map-load @loaded-map))
-            [Controls canvas-properties view-state]
+              (do
+                (handle-on-map-load @loaded-map)
+                (reset! loaded-map nil)))
+            [Controls canvas-properties view-state clear-canvas]
             [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep]
             [:div.canvasParent
               [:canvas#Canvas {:width "3000px" :height "3000px"
