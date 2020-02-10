@@ -185,7 +185,6 @@
     (def panHandler (panzoom zoomElem (clj->js {:maxZoom 1 :minZoom 0.3
                                             :minScale 1
                                             :boundsPadding 1 ; it multiplies by this is in the code for panzoom
-                                            :transformOrigin {:x 0.5 :y 0.5}
                                             :bounds true})))
     (swap! canvas-properties conj {:panRef panHandler})
     (.zoomAbs panHandler -1500 -1500 0.75)
