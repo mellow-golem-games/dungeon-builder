@@ -17,14 +17,21 @@
       true
       false)))
 
-(defn delete-by-name [name])
-
 (defn remove-item-to-update[current name]
   "user to remove the item that is being updated in the save"
   (filter (fn [map]
     (if (= (:name map) name)
       false
       true)) current))
+
+(defn delete-by-name [name]
+  (.then (get-current-state) (fn [value]
+    (let [currentValue (js->clj value :keywordize-keys true)]
+      (.then (.setItem (.-localforage js/window) "mgg-dungeonbuilder-maps"
+                         (clj->js (remove-item-to-update currentValue name))
+           (fn [result]
+             ; TODO cleanup
+             (print result))))))))
 
 ; TODO we need to make the terrain state unique either here or on population
 (defn save-map [name tile-state terrain-state loaded-map-name]

@@ -220,6 +220,18 @@ body.hide-scroll .Main {
   margin-top: 60px;
 }
 
+.LoadOverlay .MapLoadWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.LoadOverlay .MapLoadWrapper .MapButtonDelete {
+  padding-right: 15px;
+  font-size: 24px;
+  margin: 0;
+  margin-top: 17px;
+}
+
 .LoadOverlay .MapButton {
   font-size: 20px;
 }

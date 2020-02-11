@@ -10,6 +10,9 @@
   (reset! loaded-map-atom map)
   (hide-home-view))
 
+(defn delete-map [name]
+  (persistence/delete-by-name name))
+
 (defn LoadOverlay [active loaded-map-atom hide-home-view]
   (let [name (atom "")
         currentMaps (atom nil)]
@@ -19,4 +22,6 @@
         [:p.LoadOverlay__close {:on-click #(reset! active false)}"close X"]
         [:h2 "Your Maps"]
           (for [map @currentMaps]
-            [:p.MapButton {:key (:name map) :on-click #(handle-load-map map loaded-map-atom hide-home-view)} (:name map)])])))
+            [:div.MapLoadWrapper {:key (:name map)}
+              [:p.MapButtonDelete {:on-click #(delete-map (:name map))} "x"]
+              [:p.MapButton {:on-click #(handle-load-map map loaded-map-atom hide-home-view)} (:name map)]])])))
