@@ -17,6 +17,7 @@
          :tileType "floor"
          :currentTile "tile"
          :tileset "basic" ; we'll use this later to all users to switch between tile types
+         :loaded-map-name nil ; used to allow overrides
          :show-save-overlay false}))
 
 ; we pass a type as the terrain and tile maps are different
@@ -284,7 +285,8 @@
     (.clearRect ctx 0 0 3000 3000))
   (draw-canvas-lines)
   (reset! canvas-rep (generate-canvas-rep "tile"))
-  (reset! canvas-terrain-rep (generate-canvas-rep "terrain")))
+  (reset! canvas-terrain-rep (generate-canvas-rep "terrain"))
+  (swap! canvas-properties conj {:loaded-map-name nil}))
 
 
 (defn handle-on-map-load [loaded-map]
@@ -292,7 +294,10 @@
   ; TODO we also need to reset and re-draw the map lines or it holds over
   (clear-canvas)
   (map-load-paint-tiles (:tile-state loaded-map))
-  (map-load-paint-terrain (:terrain-state loaded-map)))
+  (map-load-paint-terrain (:terrain-state loaded-map))
+  (reset! canvas-rep (:tile-state loaded-map))
+  (reset! canvas-terrain-rep (:terrain-state loaded-map))
+  (swap! canvas-properties conj {:loaded-map-name (:name loaded-map)}))
 
 
 (defn Stage [loaded-map view-state]
@@ -316,7 +321,7 @@
                 (handle-on-map-load @loaded-map)
                 (reset! loaded-map nil)))
             [Controls canvas-properties view-state clear-canvas]
-            [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep]
+            [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep (:loaded-map-name @canvas-properties)]
             [:div.canvasParent
               [:canvas#Canvas {:width "3000px" :height "3000px"
                                :on-mouseDown #((do (start-paint) (paint-to-canvas (-> %)))) ; needed so a single click still works
