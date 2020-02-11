@@ -9,7 +9,7 @@
   (reset! view-state false)
   (reset! show-load-overlay false))
 
-(defn Home [view-state loaded-map-atom]
+(defn Home [loaded-map-atom view-state currentMaps]
 
   (let [showLoadOverlay (atom false)]
     (fn []
@@ -19,4 +19,4 @@
         [:div.Home-button-wrapper
           [:button {:on-click #(new-map view-state)} "New Map"]
           [:button {:on-click #(reset! showLoadOverlay true)} "Load Map"]]]
-        [LoadOverlay showLoadOverlay loaded-map-atom (partial hide-home-view showLoadOverlay view-state)]])))
+        [LoadOverlay showLoadOverlay loaded-map-atom (partial hide-home-view showLoadOverlay view-state) currentMaps]])))

@@ -24,17 +24,18 @@
       false
       true)) current))
 
-(defn delete-by-name [name]
+(defn delete-by-name [name local-maps]
   (.then (get-current-state) (fn [value]
     (let [currentValue (js->clj value :keywordize-keys true)]
       (.then (.setItem (.-localforage js/window) "mgg-dungeonbuilder-maps"
                          (clj->js (remove-item-to-update currentValue name))
            (fn [result]
-             ; TODO cleanup
-             (print result))))))))
+            (.then (get-current-state) (fn [value]
+              (reset! local-maps (js->clj value :keywordize-keys true))))
+            )))))))
 
 ; TODO we need to make the terrain state unique either here or on population
-(defn save-map [name tile-state terrain-state loaded-map-name]
+(defn save-map [name tile-state terrain-state loaded-map-name currentMaps]
   "Takes our map name state and saves it localstorage/SqlLite"
   (.then (get-current-state) (fn [value]
     (let [currentValue (js->clj value :keywordize-keys true)]
@@ -43,7 +44,8 @@
                            (clj->js (conj (remove-item-to-update currentValue name) {:name name :tile-state @tile-state :terrain-state @terrain-state}))
            (fn [result]
              ; TODO cleanup
-             (print result))))
+             (.then (get-current-state) (fn [value]
+               (reset! currentMaps (js->clj value :keywordize-keys true)))))))
         (js/alert "Name Not Unique"))))))
 
 (defn load-maps []

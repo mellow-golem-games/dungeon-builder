@@ -3,7 +3,8 @@
               [dungeon_builder.views.Home :refer [Home]]
               [dungeon_builder.views.Stage :refer [Stage]]
               [dungeon_builder.services.state.global :refer [app-state]]
-              [dungeon_builder.services.state.dispatcher :refer [handle-state-change]]))
+              [dungeon_builder.services.state.dispatcher :refer [handle-state-change]]
+              [dungeon_builder.scripts.persistence :as persistence]))
 
 (enable-console-print!)
 
@@ -11,11 +12,15 @@
 
 (def view-state (atom "home"))
 (def loaded-map-atom (atom nil)) ; we use this to load a map and then force it down to the Stage
+(def currentMaps (atom nil)) ; we use this to hold the maps a user has saved, we need it here so we can update it on save and pass it down to the load overlay
+
+(.then (persistence/load-maps) (fn [value]
+  (reset! currentMaps (js->clj value :keywordize-keys true))))
 
 (defn core []
   [:div.Main
-    [Home view-state loaded-map-atom]
-    [Stage loaded-map-atom view-state]])
+    [Home  loaded-map-atom view-state currentMaps]
+    [Stage loaded-map-atom view-state currentMaps]])
 
 (reagent/render-component [core]
                           (. js/document (getElementById "app")))
