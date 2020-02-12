@@ -121,7 +121,7 @@ body.hide-scroll .Main {
   border: 4px solid #386bd2;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 666px) {
   .tileGroup__group {
     width: 20%;
   }
@@ -168,7 +168,7 @@ body.hide-scroll .Main {
   text-align: center;
   background-image: url('../sample.jpg');
   background-size: cover;
-  background-position: center center;
+  background-position: 25%;
 }
 
 .Home.active {
@@ -230,7 +230,7 @@ body.hide-scroll .Main {
   right: 15px;
   font-size: 30px;
   margin: 0;
-  margin-top: 12px;
+  margin-top: 11px;
 }
 
 .LoadOverlay .MapButton {
