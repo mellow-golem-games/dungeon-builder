@@ -286,7 +286,7 @@
   (draw-canvas-lines)
   (reset! canvas-rep (generate-canvas-rep "tile"))
   (reset! canvas-terrain-rep (generate-canvas-rep "terrain"))
-  (swap! canvas-properties conj {:loaded-map-name nil}))
+  (swap! canvas-properties conj {:loaded-map-name nil :show-save-overlay false}))
 
 
 (defn handle-on-map-load [loaded-map]
