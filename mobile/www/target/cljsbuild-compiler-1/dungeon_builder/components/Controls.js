@@ -3,11 +3,13 @@ goog.provide('dungeon_builder.components.Controls');
 goog.require('cljs.core');
 goog.require('reagent.core');
 goog.require('dungeon_builder.components.Walls');
+goog.require('dungeon_builder.components.toast');
 dungeon_builder.components.Controls.handle_image_save = (function dungeon_builder$components$Controls$handle_image_save(){
+
 return window.canvas2ImagePlugin.saveImageDataToLibrary((function (){
-return alert("Image Saved!");
+return dungeon_builder.components.toast.fancy_alert.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"text","text",-1790561697),"Image Saved",new cljs.core.Keyword(null,"hideAfterN","hideAfterN",1402371045),true,new cljs.core.Keyword(null,"styles","styles",1954480375),new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"background","background",-863952629),"#4aa651;",new cljs.core.Keyword(null,"border","border",1444987323),"1px solid #4aa651;",new cljs.core.Keyword(null,"z-index","z-index",1892827090),"999;",new cljs.core.Keyword(null,"color","color",1011675173),"white;"], null)], null));
 }),(function (){
-return console.log("An Error Occurred");
+return dungeon_builder.components.toast.fancy_alert.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"text","text",-1790561697),"An Error Occurred",new cljs.core.Keyword(null,"hideAfterN","hideAfterN",1402371045),true,new cljs.core.Keyword(null,"styles","styles",1954480375),new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"background","background",-863952629),"#cc4a56;",new cljs.core.Keyword(null,"border","border",1444987323),"1px solid #cc4a56;",new cljs.core.Keyword(null,"z-index","z-index",1892827090),"999;",new cljs.core.Keyword(null,"color","color",1011675173),"white;"], null)], null));
 }),document.getElementById("Canvas"));
 });
 dungeon_builder.components.Controls.pause_zoom = (function dungeon_builder$components$Controls$pause_zoom(props){
@@ -33,13 +35,15 @@ dungeon_builder.components.Controls.pause_zoom.call(null,props);
 
 return cljs.core.swap_BANG_.call(null,props,cljs.core.conj,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"erase-mode","erase-mode",1775891335),true,new cljs.core.Keyword(null,"paint-mode","paint-mode",728644258),false], null));
 });
-dungeon_builder.components.Controls.handle_home = (function dungeon_builder$components$Controls$handle_home(view_state){
+dungeon_builder.components.Controls.handle_home = (function dungeon_builder$components$Controls$handle_home(view_state,clear_canvas){
+clear_canvas.call(null);
+
 return cljs.core.reset_BANG_.call(null,view_state,"home");
 });
 dungeon_builder.components.Controls.toggle_save_overlay = (function dungeon_builder$components$Controls$toggle_save_overlay(state){
 return cljs.core.swap_BANG_.call(null,state,cljs.core.conj,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"show-save-overlay","show-save-overlay",-1833325629),cljs.core.not.call(null,new cljs.core.Keyword(null,"show-save-overlay","show-save-overlay",-1833325629).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,state)))], null));
 });
-dungeon_builder.components.Controls.Controls = (function dungeon_builder$components$Controls$Controls(canvas_properties,view_state){
+dungeon_builder.components.Controls.Controls = (function dungeon_builder$components$Controls$Controls(canvas_properties,view_state,clear_canvas){
 var control_settings = reagent.core.atom.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"walls","walls",-268788818),false], null));
 return ((function (control_settings){
 return (function (){
@@ -63,11 +67,11 @@ return dungeon_builder.components.Controls.toggle_save_overlay.call(null,canvas_
 return (function (){
 return dungeon_builder.components.Controls.handle_image_save.call(null);
 });})(control_settings))
-], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"path","path",-188191168),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"fill","fill",883462889),"white",new cljs.core.Keyword(null,"d","d",1972142424),"M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"], null)], null)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p","p",151049309),"Download"], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"div.ControlItem","div.ControlItem",1495846211),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"svg","svg",856789142),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"viewBox","viewBox",-469489477),"0 0 448 512",new cljs.core.Keyword(null,"on-click","on-click",1632826543),((function (control_settings){
+], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"path","path",-188191168),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"fill","fill",883462889),"white",new cljs.core.Keyword(null,"d","d",1972142424),"M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"], null)], null)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p","p",151049309),"Download"], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"div.ControlItem","div.ControlItem",1495846211),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"svg","svg",856789142),new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"viewBox","viewBox",-469489477),"0 0 448 512",new cljs.core.Keyword(null,"on-click","on-click",1632826543),((function (control_settings){
 return (function (){
-return dungeon_builder.components.Controls.handle_home.call(null,view_state);
+return dungeon_builder.components.Controls.handle_home.call(null,view_state,clear_canvas);
 });})(control_settings))
-], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"path","path",-188191168),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"fill","fill",883462889),"white",new cljs.core.Keyword(null,"d","d",1972142424),"M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"], null)], null)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p","p",151049309),"Home"], null)], null)], null)], null);
+,new cljs.core.Keyword(null,"style","style",-496642736),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"right","right",-452581833),"3px"], null)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"path","path",-188191168),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"fill","fill",883462889),"white",new cljs.core.Keyword(null,"d","d",1972142424),"M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"], null)], null)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p","p",151049309),"Home"], null)], null)], null)], null);
 });
 ;})(control_settings))
 });

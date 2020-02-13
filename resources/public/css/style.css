@@ -204,6 +204,7 @@ body.hide-scroll .Main {
   transition: all .25s;
   background: white;
   z-index: 600;
+  overflow-y: scroll;
 }
 
 .LoadOverlay.active {
@@ -277,7 +278,7 @@ body.hide-scroll .Main {
 /* CONFIRMATION STUFF */
 
 .Confirmation {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;

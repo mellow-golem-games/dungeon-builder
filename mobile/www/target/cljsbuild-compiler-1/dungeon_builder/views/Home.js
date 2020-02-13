@@ -11,7 +11,7 @@ cljs.core.reset_BANG_.call(null,view_state,false);
 
 return cljs.core.reset_BANG_.call(null,show_load_overlay,false);
 });
-dungeon_builder.views.Home.Home = (function dungeon_builder$views$Home$Home(view_state,loaded_map_atom){
+dungeon_builder.views.Home.Home = (function dungeon_builder$views$Home$Home(loaded_map_atom,view_state,currentMaps){
 var showLoadOverlay = reagent.core.atom.call(null,false);
 return ((function (showLoadOverlay){
 return (function (){
@@ -23,7 +23,7 @@ return dungeon_builder.views.Home.new_map.call(null,view_state);
 return (function (){
 return cljs.core.reset_BANG_.call(null,showLoadOverlay,true);
 });})(showLoadOverlay))
-], null),"Load Map"], null)], null)], null),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [dungeon_builder.components.LoadOverlay.LoadOverlay,showLoadOverlay,loaded_map_atom,cljs.core.partial.call(null,dungeon_builder.views.Home.hide_home_view,showLoadOverlay,view_state)], null)], null);
+], null),"Load Map"], null)], null)], null),new cljs.core.PersistentVector(null, 5, 5, cljs.core.PersistentVector.EMPTY_NODE, [dungeon_builder.components.LoadOverlay.LoadOverlay,showLoadOverlay,loaded_map_atom,cljs.core.partial.call(null,dungeon_builder.views.Home.hide_home_view,showLoadOverlay,view_state),currentMaps], null)], null);
 });
 ;})(showLoadOverlay))
 });

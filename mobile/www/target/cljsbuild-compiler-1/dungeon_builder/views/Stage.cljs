@@ -17,6 +17,7 @@
          :tileType "floor"
          :currentTile "tile"
          :tileset "basic" ; we'll use this later to all users to switch between tile types
+         :loaded-map-name nil ; used to allow overrides
          :show-save-overlay false}))
 
 ; we pass a type as the terrain and tile maps are different
@@ -185,7 +186,6 @@
     (def panHandler (panzoom zoomElem (clj->js {:maxZoom 1 :minZoom 0.3
                                             :minScale 1
                                             :boundsPadding 1 ; it multiplies by this is in the code for panzoom
-                                            :transformOrigin {:x 0.5 :y 0.5}
                                             :bounds true})))
     (swap! canvas-properties conj {:panRef panHandler})
     (.zoomAbs panHandler -1500 -1500 0.75)
@@ -230,7 +230,7 @@
                   (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
                   (def ctx (.getContext canvas "2d"))
                   (let [imgObj (js/Image.)]
-                    (aset imgObj "src" (str "./tiles/basic/" (:tile-name (nth tileRow 0)) ".jpg"))
+                    (aset imgObj "src" (str "./tiles/"(:tileset (nth tileRow 0))"/" (:tile-name (nth tileRow 0)) ".jpg"))
                     (aset imgObj "onload" (fn []
                       (.drawImage ctx imgObj
                         (* 50 innerRowIndex)
@@ -238,6 +238,7 @@
               (recur (+ 1 innerRowIndex) (drop 1 tileRow)))))
         (recur (+ 1 rowIndex) (drop 1 tiles))))))
 
+;TODO clean up some of the do blocks here is also probably a good idea
 (defn map-load-paint-terrain [terrain-map]
   "paints terrain like doors to the canvas"
   (loop [rowIndex 0
@@ -278,40 +279,49 @@
       (recur (+ 1 rowIndex) (drop 1 tiles))))))
 
 (defn clear-canvas []
+  "clears, redraws lines, and resets our  state atoms"
   (let [canvas (.getElementById js/document "Canvas")
         ctx (.getContext canvas "2d")]
-    (.clearRect ctx 0 0 3000 3000)))
+    (.clearRect ctx 0 0 3000 3000))
+  (draw-canvas-lines)
+  (reset! canvas-rep (generate-canvas-rep "tile"))
+  (reset! canvas-terrain-rep (generate-canvas-rep "terrain"))
+  (swap! canvas-properties conj {:loaded-map-name nil :show-save-overlay false}))
+
 
 (defn handle-on-map-load [loaded-map]
   "handles painting the loaded map to the canvas"
   ; TODO we also need to reset and re-draw the map lines or it holds over
   (clear-canvas)
-  (draw-canvas-lines)
   (map-load-paint-tiles (:tile-state loaded-map))
-  (map-load-paint-terrain (:terrain-state loaded-map)))
+  (map-load-paint-terrain (:terrain-state loaded-map))
+  (reset! canvas-rep (:tile-state loaded-map))
+  (reset! canvas-terrain-rep (:terrain-state loaded-map))
+  (swap! canvas-properties conj {:loaded-map-name (:name loaded-map)}))
 
 
-(defn Stage [loaded-map view-state]
+(defn Stage [loaded-map view-state currentMaps]
   (reagent/create-class                 ;; <-- expects a map of functions
     {:display-name  "canvas"      ;; for more helpful warnings & errors
 
       :component-did-mount               ;; the name of a lifecycle function
         (fn [this]
-          (render-canvas)
-          (println "component-did-mount")) ;; your implementation
+          (render-canvas))
 
        :component-did-update              ;; the name of a lifecycle function
         (fn [this old-argv]                ;; reagent provides you the entire "argv", not just the "props"
-          )
+        )
 
         ;; other lifecycle funcs can go in here
         :reagent-render        ;; Note:  is not :render
-         (fn [loaded-map view-state]           ;; remember to repeat parameters
+         (fn [loaded-map view-state currentMaps]           ;; remember to repeat parameters
           [:div.Stage
             (if @loaded-map
-              (handle-on-map-load @loaded-map))
-            [Controls canvas-properties view-state]
-            [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep]
+              (do
+                (handle-on-map-load @loaded-map)
+                (reset! loaded-map nil)))
+            [Controls canvas-properties view-state clear-canvas]
+            [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep (:loaded-map-name @canvas-properties) currentMaps]
             [:div.canvasParent
               [:canvas#Canvas {:width "3000px" :height "3000px"
                                :on-mouseDown #((do (start-paint) (paint-to-canvas (-> %)))) ; needed so a single click still works
