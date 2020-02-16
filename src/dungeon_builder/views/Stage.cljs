@@ -299,6 +299,9 @@
   (reset! canvas-terrain-rep (:terrain-state loaded-map))
   (swap! canvas-properties conj {:loaded-map-name (:name loaded-map)}))
 
+(defn on-save [name]
+  (swap! canvas-properties conj {:loaded-map-name name}))
+
 
 (defn Stage [loaded-map view-state currentMaps]
   (reagent/create-class                 ;; <-- expects a map of functions
@@ -321,7 +324,7 @@
                 (handle-on-map-load @loaded-map)
                 (reset! loaded-map nil)))
             [Controls canvas-properties view-state clear-canvas]
-            [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep (:loaded-map-name @canvas-properties) currentMaps]
+            [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep (:loaded-map-name @canvas-properties) currentMaps on-save]
             [:div.canvasParent
               [:canvas#Canvas {:width "3000px" :height "3000px"
                                :on-mouseDown #((do (start-paint) (paint-to-canvas (-> %)))) ; needed so a single click still works

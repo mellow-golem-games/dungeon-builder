@@ -11,10 +11,10 @@
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <preference name="Camera Access To Save Image To Device" default=" " />
     <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
-      <string>$PHOTO_LIBRARY_USAGE_DESCRIPTION</string>
+      <string>Save Images To Device</string>
     </config-file>
     <config-file target="*-Info.plist" parent="NSPhotoLibraryAddUsageDescription">
-      <string>$PHOTO_LIBRARY_USAGE_DESCRIPTION</string>
+      <string>Save Images To Device</string>
     </config-file>
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -32,7 +32,7 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <icon density="mdpi" height="1024" platform="ios" src="res/icon/ios/icon.png" width="1024" />
-    <icon density="mdpi" height="120" platform="ios" src="res/icon/ios/icon-60-2x.png" width="120" />
+    <icon density="mdpi" height="60" platform="ios" src="res/icon/ios/icon-60.png" width="60" />
     <icon density="mdpi" height="114" platform="ios" src="res/icon/ios/icon-57-2x.png" width="114" />
     <icon density="mdpi" height="57" platform="ios" src="res/icon/ios/icon-57.png" width="57" />
     <icon density="mdpi" height="144" platform="ios" src="res/icon/ios/icon-72-2x.png" width="144" />
@@ -49,6 +49,7 @@
     <icon density="mdpi" height="40" platform="ios" src="res/icon/ios/icon-20-2x.png" width="40" />
     <icon density="mdpi" height="20" platform="ios" src="res/icon/ios/icon-20.png" width="20" />
     <icon density="mdpi" height="100" platform="ios" src="res/icon/ios/icon-50-2x.png" width="100" />
+    <icon density="mdpi" height="120" platform="ios" src="res/icon/ios/icon-120.png" width="120" />
     <icon density="mdpi" height="50" platform="ios" src="res/icon/ios/icon-50.png" width="50" />
     <splash height="960" src="res/screen/ios/screen-iphone-portrait-2x.png" width="640" />
     <splash height="1136" src="res/screen/ios/screen-iphone-portrait-568h-2x.png" width="640" />
