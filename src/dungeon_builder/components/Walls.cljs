@@ -36,7 +36,7 @@
           [:div.tileGroup__group
             [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "wood")) "active")
                    :src "./tiles/wood/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "wood")}]
-            [:p "Floor"]]
+            [:p "Wood"]]
 
           ]
 
@@ -55,5 +55,7 @@
         [:img {:style {:height "9px"}
                :src "./tiles/terrain/door_long.png" :on-click #(on-wall-select canvas-properties "door_long" "terrain" nil)}]]
       [:div.tileGroup__group {:class (if (= (:currentTile @canvas-properties) "door_tall") "active") :style {:height "60px"}}
-        [:img {:src "./tiles/terrain/door_tall.png" :on-click #(on-wall-select canvas-properties "door_tall" "terrain" nil)}]]]
+        [:img {:src "./tiles/terrain/door_tall.png" :on-click #(on-wall-select canvas-properties "door_tall" "terrain" nil)}]]
+      [:div.tileGroup__group {:class (if (= (:currentTile @canvas-properties) "trap") "active") :style {:height "60px"}}
+        [:img {:src "./tiles/terrain/trap.png" :on-click #(on-wall-select canvas-properties "trap" "terrain" nil)}]]]
 ])

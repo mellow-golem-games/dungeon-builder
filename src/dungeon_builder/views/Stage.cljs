@@ -122,11 +122,10 @@
         imgSrc (get-img-src event)
         canvas (.getElementById js/document "Canvas")
         ctx (.getContext canvas "2d")]
-
-    ; TODO turn this into a cond for now we only have 2 terrain types though
-    (if (str/includes? (:currentTile @canvas-properties) "door")
-      (terrain/draw-door ctx event imgObj @canvas-properties update-cavas-terrain-rep)
-      (terrain/draw-terrain-wall ctx event imgObj @canvas-properties update-cavas-terrain-rep))))
+    (cond
+      (str/includes? (:currentTile @canvas-properties) "trap") (terrain/draw-trap ctx event imgObj @canvas-properties update-cavas-terrain-rep)
+      (str/includes? (:currentTile @canvas-properties) "door")    (terrain/draw-door ctx event imgObj @canvas-properties update-cavas-terrain-rep)
+      :else (terrain/draw-terrain-wall ctx event imgObj @canvas-properties update-cavas-terrain-rep))))
 
 (defn paint-to-canvas [event]
   (.persist event)
