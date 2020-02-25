@@ -31,7 +31,14 @@
         [:div.tileGroup__group
           [:img {:class (if (and (= (:currentTile @canvas-properties) "wall_tile_left") (= (:tileset @canvas-properties) "dark")) "active")
                 :src "./tiles/dark/wall_tile_left.jpg" :on-click #(on-wall-select canvas-properties "wall_tile_left" "wall" "dark")}]
-          [:p "Floor W/ Wall"]]]
+          [:p "Floor W/ Wall"]]
+
+          [:div.tileGroup__group
+            [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "wood")) "active")
+                   :src "./tiles/wood/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "wood")}]
+            [:p "Floor"]]
+
+          ]
 
     [:h2 "Terrain"]
     [:div.tileGroup
