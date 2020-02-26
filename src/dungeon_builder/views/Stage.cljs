@@ -56,14 +56,16 @@
     (= (:currentTile @canvas-properties) "small_wall")      1
     (= (:currentTile @canvas-properties) "small_wall_side") 2
     (= (:currentTile @canvas-properties) "door_tall")       3
-    (= (:currentTile @canvas-properties) "door_long")       4))
+    (= (:currentTile @canvas-properties) "door_long")       4
+    (= (:currentTile @canvas-properties) "trap")            5))
 
 (defn get-tile-value-terrain-load [val]
   (cond
     (= val 1) "small_wall"
     (= val 2) "small_wall_side"
     (= val 3) "door_tall"
-    (= val 4) "door_long"))
+    (= val 4) "door_long"
+    (= val 5) "trap"))
 
 (defn handle-wall-orientation [y x] ; y first as locicallit it's -> y down x
   (if (= (:tileType @canvas-properties) "wall")
@@ -256,23 +258,33 @@
                             imgSrc (get-tile-value-terrain-load (nth terrainObj 0))
                             canvas (.getElementById js/document "Canvas")
                             ctx (.getContext canvas "2d")]
-                        (if (str/includes? imgSrc "door")
+                        ;TODO we need to think of a better way to do this - will get mess with more terrain
+                        ; think we need to refactor the terrain/draw namespace to break out the canvas update - then just
+                        ; not call it here so we can re-use hte logic we're already using to draw terrain
+                        (if (str/includes? imgSrc "trap")
                           (do
                             (aset imgObj "src" (str "./tiles/terrain/"imgSrc".png"))
                             (aset imgObj "onload" (fn []
-                              (if (str/includes? imgSrc "door_tall")
-                                (.drawImage ctx imgObj
-                                            (- (* 50 innerRowIndex) 5)
-                                            (+ (* 50 rowIndex) 12))
-                                (.drawImage ctx imgObj
-                                            (+ (* 50 innerRowIndex) 12)
-                                            (- (* 50 rowIndex) 5))))))
-                          (do
-                            (aset imgObj "src" (str "./tiles/terrain/"imgSrc".jpg"))
-                            (aset imgObj "onload" (fn []
                               (.drawImage ctx imgObj
                                 (* 50 innerRowIndex)
-                                (- (* 50 rowIndex) 2)))))))
+                                (- (* 50 rowIndex) 2)))))
+                          (if (str/includes? imgSrc "door")
+                            (do
+                              (aset imgObj "src" (str "./tiles/terrain/"imgSrc".png"))
+                              (aset imgObj "onload" (fn []
+                                (if (str/includes? imgSrc "door_tall")
+                                  (.drawImage ctx imgObj
+                                              (- (* 50 innerRowIndex) 5)
+                                              (+ (* 50 rowIndex) 12))
+                                  (.drawImage ctx imgObj
+                                              (+ (* 50 innerRowIndex) 12)
+                                              (- (* 50 rowIndex) 5))))))
+                            (do
+                              (aset imgObj "src" (str "./tiles/terrain/"imgSrc".jpg"))
+                              (aset imgObj "onload" (fn []
+                                (.drawImage ctx imgObj
+                                  (* 50 innerRowIndex)
+                                  (- (* 50 rowIndex) 2))))))))
                       (recur (drop 1 terrainObj))))))
               (recur (+ 1 innerRowIndex) (drop 1 tileRow)))))
       (recur (+ 1 rowIndex) (drop 1 tiles))))))
