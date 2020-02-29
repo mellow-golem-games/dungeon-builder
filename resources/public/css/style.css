@@ -95,6 +95,7 @@ body.hide-scroll .Main {
   padding: 15px;
   box-sizing: border-box;
   overflow-y: scroll;
+  padding-bottom: 100px;
 }
 
 .Control_overlay.active {

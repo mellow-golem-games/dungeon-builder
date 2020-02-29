@@ -85,7 +85,11 @@ return (3);
 if(cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"currentTile","currentTile",1481755860).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,dungeon_builder.views.Stage.canvas_properties)),"door_long")){
 return (4);
 } else {
+if(cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"currentTile","currentTile",1481755860).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,dungeon_builder.views.Stage.canvas_properties)),"trap")){
+return (5);
+} else {
 return null;
+}
 }
 }
 }
@@ -104,7 +108,11 @@ return "door_tall";
 if(cljs.core._EQ_.call(null,val,(4))){
 return "door_long";
 } else {
+if(cljs.core._EQ_.call(null,val,(5))){
+return "trap";
+} else {
 return null;
+}
 }
 }
 }
@@ -177,10 +185,15 @@ var imgObj = (new Image());
 var imgSrc = dungeon_builder.views.Stage.get_img_src.call(null,event);
 var canvas = document.getElementById("Canvas");
 var ctx = canvas.getContext("2d");
+if(clojure.string.includes_QMARK_.call(null,new cljs.core.Keyword(null,"currentTile","currentTile",1481755860).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,dungeon_builder.views.Stage.canvas_properties)),"trap")){
+return dungeon_builder.scripts.terrain.draw_trap.call(null,ctx,event,imgObj,cljs.core.deref.call(null,dungeon_builder.views.Stage.canvas_properties),dungeon_builder.views.Stage.update_cavas_terrain_rep);
+} else {
 if(clojure.string.includes_QMARK_.call(null,new cljs.core.Keyword(null,"currentTile","currentTile",1481755860).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,dungeon_builder.views.Stage.canvas_properties)),"door")){
 return dungeon_builder.scripts.terrain.draw_door.call(null,ctx,event,imgObj,cljs.core.deref.call(null,dungeon_builder.views.Stage.canvas_properties),dungeon_builder.views.Stage.update_cavas_terrain_rep);
 } else {
 return dungeon_builder.scripts.terrain.draw_terrain_wall.call(null,ctx,event,imgObj,cljs.core.deref.call(null,dungeon_builder.views.Stage.canvas_properties),dungeon_builder.views.Stage.update_cavas_terrain_rep);
+
+}
 }
 });
 dungeon_builder.views.Stage.paint_to_canvas = (function dungeon_builder$views$Stage$paint_to_canvas(event){
@@ -384,6 +397,15 @@ var imgObj_22216 = (new Image());
 var imgSrc_22217 = dungeon_builder.views.Stage.get_tile_value_terrain_load.call(null,cljs.core.nth.call(null,terrainObj_22215,(0)));
 var canvas_22218 = document.getElementById("Canvas");
 var ctx_22219 = canvas_22218.getContext("2d");
+if(clojure.string.includes_QMARK_.call(null,imgSrc_22217,"trap")){
+(imgObj_22216["src"] = ["./tiles/terrain/",imgSrc_22217,".png"].join(''));
+
+(imgObj_22216["onload"] = ((function (terrainObj_22215,innerRowIndex_22213,tileRow_22214,rowIndex,tiles,imgObj_22216,imgSrc_22217,canvas_22218,ctx_22219){
+return (function (){
+return ctx_22219.drawImage(imgObj_22216,((50) * innerRowIndex_22213),(((50) * rowIndex) - (2)));
+});})(terrainObj_22215,innerRowIndex_22213,tileRow_22214,rowIndex,tiles,imgObj_22216,imgSrc_22217,canvas_22218,ctx_22219))
+);
+} else {
 if(clojure.string.includes_QMARK_.call(null,imgSrc_22217,"door")){
 (imgObj_22216["src"] = ["./tiles/terrain/",imgSrc_22217,".png"].join(''));
 
@@ -404,6 +426,7 @@ return (function (){
 return ctx_22219.drawImage(imgObj_22216,((50) * innerRowIndex_22213),(((50) * rowIndex) - (2)));
 });})(terrainObj_22215,innerRowIndex_22213,tileRow_22214,rowIndex,tiles,imgObj_22216,imgSrc_22217,canvas_22218,ctx_22219))
 );
+}
 }
 
 var G__22220 = cljs.core.drop.call(null,(1),terrainObj_22215);
