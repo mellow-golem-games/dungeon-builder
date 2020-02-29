@@ -15,6 +15,9 @@ pom.xml
 /node_modules
 /mobile/www/js
 /mobile/www/css
+/mobile/www/tiles
+/mobile/www/target
 /mobile/platforms
 /mobile/node_modules
 /mobile/plugins
+
