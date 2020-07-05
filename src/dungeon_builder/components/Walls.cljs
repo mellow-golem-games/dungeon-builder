@@ -36,7 +36,12 @@
           [:div.tileGroup__group
             [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "wood")) "active")
                    :src "./tiles/wood/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "wood")}]
-            [:p "Wood"]]]
+            [:p "Wood"]]
+
+          [:div.tileGroup__group
+            [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "stone")) "active")
+                   :src "./tiles/stone/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "stone")}]
+            [:p "Stone"]]]
 
     [:h2 "Terrain"]
     [:div.tileGroup
