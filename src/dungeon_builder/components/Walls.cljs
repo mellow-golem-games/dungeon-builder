@@ -12,26 +12,16 @@
 
     [:h2 "Tilesets"]
     [:div.tileGroup
-      [:h3 "Basic"]
-      [:h3 "Dark"]
       [:div.tileGroup__group
         [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "basic")) "active")
                :src "./tiles/basic/tile-1.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "basic")}]
-        [:p "Floor"]]
-      [:div.tileGroup__group
-        [:img {:class (if (and (= (:currentTile @canvas-properties) "wall_tile_left") (= (:tileset @canvas-properties) "basic")) "active")
-               :src "./tiles/basic/wall_tile_left.jpg" :on-click #(on-wall-select canvas-properties "wall_tile_left" "wall" "basic")}]
-        [:p "Floor W/ Wall"]]
+        [:p "Baic Floor"]]
 
         [:div.tileGroup__group
           [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "dark")) "active")
                 :src "./tiles/dark/tile-1.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "dark")}]
-          [:p "Floor"]]
+          [:p "Dark Floor"]]
 
-        [:div.tileGroup__group
-          [:img {:class (if (and (= (:currentTile @canvas-properties) "wall_tile_left") (= (:tileset @canvas-properties) "dark")) "active")
-                :src "./tiles/dark/wall_tile_left.jpg" :on-click #(on-wall-select canvas-properties "wall_tile_left" "wall" "dark")}]
-          [:p "Floor W/ Wall"]]
 
           [:div.tileGroup__group
             [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "wood")) "active")
