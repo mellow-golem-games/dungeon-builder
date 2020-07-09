@@ -56,3 +56,12 @@
 (defn load-maps []
   "Loads a given map by name"
   (get-current-state))
+
+
+(defn set-preview []
+  (.setItem (.-localforage js/window) "mgg-dungeonbuilder-previews" true))
+
+
+(defn load-previews []
+  (.getItem (.-localforage js/window) "mgg-dungeonbuilder-previews"))
+
