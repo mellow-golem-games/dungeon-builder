@@ -96,7 +96,12 @@
 ; very little maintence cost
 (defn update-canvas-rep [x y imgSrc]
   ; e.x object {:type (or 1 0)  :tileset "basic" :tile-name  tile-1.jpg (this is the random part)}
-  (swap! canvas-rep update-in [(/ y 50) (/ x 50)] conj (generate-tile-rep imgSrc)))
+  (if (not imgSrc)
+    (swap! canvas-rep update-in [(/ y 50) (/ x 50)] (fn [_] {}))
+    (swap! canvas-rep update-in [(/ y 50) (/ x 50)] conj (generate-tile-rep imgSrc))))
+
+(defn erase-canvas-terrain [x y]
+  (swap! canvas-terrain-rep update-in [(/ y 50) (/ x 50)] (fn [_] [])))
 
 (defn update-cavas-terrain-rep [x y]
   ; we conj into the vector so a tile can have multiple pieces of terrain like a door and a wall!
@@ -131,12 +136,13 @@
 
 (defn paint-to-canvas [event]
   (.persist event)
+  (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
+  (def ctx (.getContext canvas "2d"))
+
   (if (and (:painting @canvas-properties) (:paint-mode @canvas-properties))
     (if (= (:tileType @canvas-properties) "terrain")
       (draw-terrain-img-to-canvas event)
       (do
-        (def canvas (.getElementById js/document "Canvas")) ; TODO we should probably save a ref to these in the atom
-        (def ctx (.getContext canvas "2d"))
         (let [imgObj (js/Image.)
               tileset (:tileset @canvas-properties)
               ; create a new get tile src functioin
@@ -151,7 +157,11 @@
     (let [x (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom @canvas-properties)) 50))
           y (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom @canvas-properties)) 50))]
       (.clearRect ctx x y 50 50) ; clears our rectangle of the current Image
-
+      (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom @canvas-properties)) 50))
+                         (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom @canvas-properties)) 50))
+                         nil)
+      (erase-canvas-terrain (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom @canvas-properties)) 50))
+                            (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom @canvas-properties)) 50)))
       ; since we clear the whole rectangle we need to then redraw the line or they'll be missing afterwards
       (.beginPath ctx)
       (.moveTo ctx x y)
@@ -305,7 +315,9 @@
   ; TODO we also need to reset and re-draw the map lines or it holds over
   (clear-canvas)
   (map-load-paint-tiles (:tile-state loaded-map))
-  (map-load-paint-terrain (:terrain-state loaded-map))
+
+  (js/setTimeout #(map-load-paint-terrain (:terrain-state loaded-map)) 400)
+
   (reset! canvas-rep (:tile-state loaded-map))
   (reset! canvas-terrain-rep (:terrain-state loaded-map))
   (swap! canvas-properties conj {:loaded-map-name (:name loaded-map)}))

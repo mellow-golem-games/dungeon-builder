@@ -4,8 +4,11 @@
 
 (defn handle-save [name tile-state terrain-state loaded-map-name currentMaps onSave]
   "TODO probably some UI cleanup here so we make it separate from the actual save"
-  (persistence/save-map name tile-state terrain-state loaded-map-name currentMaps)
-  (onSave name))
+  (.then (persistence/save-map name tile-state terrain-state loaded-map-name currentMaps)
+    (fn [value]
+      (if value
+        (onSave name)))))
+
 
 (defn get-placeholder [loaded-map-name]
   (if loaded-map-name

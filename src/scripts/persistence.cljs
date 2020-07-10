@@ -48,10 +48,12 @@
                (reset! currentMaps (js->clj value :keywordize-keys true))
                (fancy-alert/fancy-alert
                  {:text "Map Saved" :hideAfterN true
-                  :styles {:background "#4aa651;" :border "1px solid #4aa651;" :z-index "999;" :color "white;"}}))))))
-        (fancy-alert/fancy-alert
+                  :styles {:background "#4aa651;" :border "1px solid #4aa651;" :z-index "999;" :color "white;"}}))))) true)
+        (do
+         (fancy-alert/fancy-alert
           {:text "Name Not Unique" :hideAfterN true
-           :styles {:background "#cc4a56;" :border "1px solid #cc4a56;" :z-index "999;" :color "white;"}}))))))
+           :styles {:background "#cc4a56;" :border "1px solid #cc4a56;" :z-index "999;" :color "white;"}})
+          false))))))
 
 (defn load-maps []
   "Loads a given map by name"
