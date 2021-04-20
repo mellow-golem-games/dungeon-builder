@@ -60,8 +60,8 @@
   (get-current-state))
 
 
-(defn set-preview []
-  (.setItem (.-localforage js/window) "mgg-dungeonbuilder-previews" true))
+(defn set-preview [value]
+  (.setItem (.-localforage js/window) "mgg-dungeonbuilder-previews" value))
 
 
 (defn load-previews []
