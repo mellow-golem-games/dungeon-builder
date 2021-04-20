@@ -27,14 +27,14 @@
   (loop [x 50
          canvas-build []]
     (let [canvas-row-values
-      (loop [y 50
-            canvas-build-inner []]
-        (if (> y 3000)
-          canvas-build-inner
-          (recur (+ y 50) (conj canvas-build-inner (if (= type "terrain") [] {})))))]
-    (if (> x 3000)
-      canvas-build
-      (recur (+ x 50) (conj canvas-build canvas-row-values))))))
+          (loop [y 50
+                 canvas-build-inner []]
+            (if (> y 3000)
+              canvas-build-inner
+              (recur (+ y 50) (conj canvas-build-inner (if (= type "terrain") [] {})))))]
+     (if (> x 3000)
+       canvas-build
+       (recur (+ x 50) (conj canvas-build canvas-row-values))))))
 
 (def canvas-rep (atom (generate-canvas-rep "tile")))
 (def canvas-terrain-rep (atom (generate-canvas-rep "terrain"))) ; this holds our state for walls/doors/other terrain
@@ -69,10 +69,10 @@
 
 (defn handle-wall-orientation [y x] ; y first as locicallit it's -> y down x
   (if (= (:tileType @canvas-properties) "wall")
-    (let [wallMap {:left   (walls/check-left y x @canvas-rep ) ; creates a map of the direction the floor tiles are
+    (let [wallMap {:left   (walls/check-left y x @canvas-rep) ; creates a map of the direction the floor tiles are
                    :right  (walls/check-right y x @canvas-rep)
-                   :top    (walls/check-top y x @canvas-rep )
-                   :bottom (walls/check-bottom y x @canvas-rep )
+                   :top    (walls/check-top y x @canvas-rep)
+                   :bottom (walls/check-bottom y x @canvas-rep)
                    :tright (walls/check-tright-corner y x @canvas-rep)
                    :bright (walls/check-bright-corner y x @canvas-rep)
                    :tleft  (walls/check-tleft-corner y x @canvas-rep)
@@ -86,7 +86,7 @@
         (:bright wallMap) "wall_tile_corner_bright"
         (:tleft wallMap) "wall_tile_corner_tleft"
         (:bleft wallMap) "wall_tile_corner_bleft"))
-      (:currentTile @canvas-properties))) ; end of if - we are just placing floors
+    (:currentTile @canvas-properties))) ; end of if - we are just placing floors
 
 (defn generate-tile-rep [imgSrc]
   {:type (get-tile-value) :tileset (:tileset @canvas-properties) :tile-name imgSrc})
@@ -116,8 +116,8 @@
   ; first we should determine the orientation of the wall
   ; then we should determine if it is a small wall or a big wall
   ; last we should randomize the number if the selection is a tile
-    (get-random-tile (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50)))
-  )
+    (get-random-tile (handle-wall-orientation (/ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (.-clientY event)) (:zoom @canvas-properties)) 50)) 50) (/ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (.-clientX event)) (:zoom @canvas-properties)) 50)) 50))))
+
 
 (defn draw-img-to-canvas [ctx imgObj event]
     (.drawImage ctx imgObj
@@ -149,10 +149,10 @@
               imgSrc (get-img-src event)]
           (aset imgObj "src" (str "./tiles/"tileset"/"imgSrc".jpg"))
           (aset imgObj "onload" (fn []
-            (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom @canvas-properties)) 50))
-                               (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom @canvas-properties)) 50))
-                               imgSrc)
-            (draw-img-to-canvas ctx imgObj event))))))
+                                 (update-canvas-rep (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom @canvas-properties)) 50))
+                                                    (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom @canvas-properties)) 50))
+                                                    imgSrc)
+                                 (draw-img-to-canvas ctx imgObj event))))))
    (if (and (:painting @canvas-properties) (:erase-mode @canvas-properties))
     (let [x (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom @canvas-properties)) 50))
           y (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom @canvas-properties)) 50))]
@@ -195,14 +195,14 @@
   (let [zoomElem (.querySelector js/document "#Canvas")
         ctx (.getContext zoomElem "2d")]
     (def panHandler (panzoom zoomElem (clj->js {:maxZoom 1 :minZoom 0.3
-                                            :minScale 1
-                                            :boundsPadding 1 ; it multiplies by this is in the code for panzoom
-                                            :bounds true})))
+                                                :minScale 1
+                                                :boundsPadding 1 ; it multiplies by this is in the code for panzoom
+                                                :bounds true})))
     (swap! canvas-properties conj {:panRef panHandler})
     (.zoomAbs panHandler -1500 -1500 0.75)
     (.pause panHandler)
     (.on panHandler "transform" (fn [e] ; we need to pull the zoom in order to adjust the onclick coords
-      (swap! canvas-properties conj {:zoom (.-scale (.getTransform e))})))
+                                 (swap! canvas-properties conj {:zoom (.-scale (.getTransform e))})))
     (loop [x 50]
       (if (> x 3000)
         true
@@ -243,9 +243,9 @@
                   (let [imgObj (js/Image.)]
                     (aset imgObj "src" (str "./tiles/"(:tileset (nth tileRow 0))"/" (:tile-name (nth tileRow 0)) ".jpg"))
                     (aset imgObj "onload" (fn []
-                      (.drawImage ctx imgObj
-                        (* 50 innerRowIndex)
-                        (* 50 rowIndex)))))))
+                                           (.drawImage ctx imgObj
+                                             (* 50 innerRowIndex)
+                                             (* 50 rowIndex)))))))
               (recur (+ 1 innerRowIndex) (drop 1 tileRow)))))
         (recur (+ 1 rowIndex) (drop 1 tiles))))))
 
@@ -275,29 +275,29 @@
                           (do
                             (aset imgObj "src" (str "./tiles/terrain/"imgSrc".png"))
                             (aset imgObj "onload" (fn []
-                              (.drawImage ctx imgObj
-                                (* 50 innerRowIndex)
-                                (- (* 50 rowIndex) 2)))))
+                                                   (.drawImage ctx imgObj
+                                                     (* 50 innerRowIndex)
+                                                     (- (* 50 rowIndex) 2)))))
                           (if (str/includes? imgSrc "door")
                             (do
                               (aset imgObj "src" (str "./tiles/terrain/"imgSrc".png"))
                               (aset imgObj "onload" (fn []
-                                (if (str/includes? imgSrc "door_tall")
-                                  (.drawImage ctx imgObj
-                                              (- (* 50 innerRowIndex) 5)
-                                              (+ (* 50 rowIndex) 12))
-                                  (.drawImage ctx imgObj
-                                              (+ (* 50 innerRowIndex) 12)
-                                              (- (* 50 rowIndex) 5))))))
+                                                     (if (str/includes? imgSrc "door_tall")
+                                                       (.drawImage ctx imgObj
+                                                                   (- (* 50 innerRowIndex) 5)
+                                                                   (+ (* 50 rowIndex) 12))
+                                                       (.drawImage ctx imgObj
+                                                                   (+ (* 50 innerRowIndex) 12)
+                                                                   (- (* 50 rowIndex) 5))))))
                             (do
                               (aset imgObj "src" (str "./tiles/terrain/"imgSrc".jpg"))
                               (aset imgObj "onload" (fn []
-                                (.drawImage ctx imgObj
-                                  (* 50 innerRowIndex)
-                                  (- (* 50 rowIndex) 2))))))))
+                                                     (.drawImage ctx imgObj
+                                                       (* 50 innerRowIndex)
+                                                       (- (* 50 rowIndex) 2))))))))
                       (recur (drop 1 terrainObj))))))
               (recur (+ 1 innerRowIndex) (drop 1 tileRow)))))
-      (recur (+ 1 rowIndex) (drop 1 tiles))))))
+       (recur (+ 1 rowIndex) (drop 1 tiles))))))
 
 (defn clear-canvas []
   "clears, redraws lines, and resets our  state atoms"
@@ -335,24 +335,24 @@
           (render-canvas))
 
        :component-did-update              ;; the name of a lifecycle function
-        (fn [this old-argv]                ;; reagent provides you the entire "argv", not just the "props"
-        )
+        (fn [this old-argv])                ;; reagent provides you the entire "argv", not just the "props"
+
 
         ;; other lifecycle funcs can go in here
         :reagent-render        ;; Note:  is not :render
-         (fn [loaded-map view-state currentMaps]           ;; remember to repeat parameters
-          [:div.Stage
-            (if @loaded-map
-              (do
-                (handle-on-map-load @loaded-map)
-                (reset! loaded-map nil)))
-            [Controls canvas-properties view-state clear-canvas]
-            [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep (:loaded-map-name @canvas-properties) currentMaps on-save]
-            [:div.canvasParent
-              [:canvas#Canvas {:width "3000px" :height "3000px"
-                               :on-mouseDown #((do (start-paint) (paint-to-canvas (-> %)))) ; needed so a single click still works
-                               :on-mouseUp #(end-paint)
-                               :on-mouseMove #(paint-to-canvas (-> %))
-                               :on-touch-start #((do (start-paint) (paint-to-canvas (-> %))))
-                               :on-touch-end  #(end-paint)
-                               :on-touch-move #(paint-to-canvas (-> %))}]]])}))
+        (fn [loaded-map view-state currentMaps]           ;; remember to repeat parameters
+         [:div.Stage
+           (if @loaded-map
+             (do
+               (handle-on-map-load @loaded-map)
+               (reset! loaded-map nil)))
+           [Controls canvas-properties view-state clear-canvas]
+           [SaveOverlay (:show-save-overlay @canvas-properties) canvas-rep canvas-terrain-rep (:loaded-map-name @canvas-properties) currentMaps on-save]
+           [:div.canvasParent
+             [:canvas#Canvas {:width "3000px" :height "3000px"
+                              :on-mouseDown #((do (start-paint) (paint-to-canvas (-> %)))) ; needed so a single click still works
+                              :on-mouseUp #(end-paint)
+                              :on-mouseMove #(paint-to-canvas (-> %))
+                              :on-touch-start #((do (start-paint) (paint-to-canvas (-> %))))
+                              :on-touch-end  #(end-paint)
+                              :on-touch-move #(paint-to-canvas (-> %))}]]])}))

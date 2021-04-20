@@ -17,21 +17,31 @@
                :src "./tiles/basic/tile-1.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "basic")}]
         [:p "Baic Floor"]]
 
-        [:div.tileGroup__group
-          [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "dark")) "active")
-                :src "./tiles/dark/tile-1.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "dark")}]
-          [:p "Dark Floor"]]
+      [:div.tileGroup__group
+        [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "dark")) "active")
+               :src "./tiles/dark/tile-1.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "dark")}]
+        [:p "Dark Floor"]]
 
 
-          [:div.tileGroup__group
-            [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "wood")) "active")
-                   :src "./tiles/wood/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "wood")}]
-            [:p "Wood"]]
+      [:div.tileGroup__group
+        [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "wood")) "active")
+               :src "./tiles/wood/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "wood")}]
+        [:p "Wood"]]
 
-          [:div.tileGroup__group
-            [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "stone")) "active")
-                   :src "./tiles/stone/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "stone")}]
-            [:p "Stone"]]]
+      [:div.tileGroup__group
+        [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "stone")) "active")
+               :src "./tiles/stone/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "stone")}]
+        [:p "Stone"]]
+
+      [:div.tileGroup__group
+        [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "grass")) "active")
+               :src "./tiles/grass/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "grass")}]
+        [:p "Grass"]]
+
+      [:div.tileGroup__group
+        [:img {:class (if (and (= (:currentTile @canvas-properties) "tile") (= (:tileset @canvas-properties) "sand")) "active")
+               :src "./tiles/sand/tile-0.jpg" :on-click #(on-wall-select canvas-properties "tile" "floor" "sand")}]
+        [:p "Sand"]]]
 
     [:h2 "Terrain"]
     [:div.tileGroup
