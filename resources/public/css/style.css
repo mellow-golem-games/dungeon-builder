@@ -22,6 +22,14 @@ body.hide-scroll .Main {
   /* opacity: 0; WE need to move this to the warpper on the home page content itself not hte overall wrap */
 }
 
+/* These two lines remove highlighting on text - bad for a app but okay since we don't want button like items to be highlighted on mobile apps. */
+::selection {
+  background: transparent; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: transparent; /* Gecko Browsers */
+}
+
 .Page {
   position: fixed;
   top: calc(-105% - 100px);
@@ -60,13 +68,16 @@ body.hide-scroll .Main {
 
 .ControlItem {
   text-align: center;
+  box-sizing: border-box;
+  border: 4px solid transparent;
 }
 
 .ControlItem p {
   margin: 0;
   font-size: 12px;
+  position: relative;
+  bottom: 4px;
 }
-
 
 .Controls img.active {
   border: 4px solid #386bd2;
@@ -76,7 +87,7 @@ body.hide-scroll .Main {
   border: 4px solid transparent;
 }
 
-.Controls svg.active {
+.ControlItem.active {
   border: 4px solid #386bd2;
 }
 
@@ -85,6 +96,7 @@ body.hide-scroll .Main {
   width: 30px;
   height: 30px;
   padding: 5px;
+  margin: 0 auto;
 }
 
 .Control_overlay {
@@ -147,6 +159,10 @@ body.hide-scroll .Main {
   height: calc(100% - 75px);
   overflow: hidden;
   position: relative;
+}
+
+.canvasParent:focus {
+  outline: none;
 }
 
 #Canvas {

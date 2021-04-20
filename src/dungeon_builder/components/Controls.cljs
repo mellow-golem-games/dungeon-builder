@@ -43,21 +43,20 @@
 ; not a huge fan of passing clear-canvas here but probably the easiest way to deal with the reload
 (defn Controls [canvas-properties view-state clear-canvas]
   (let [control-settings (atom {:walls false})]
-    (fn []
+    (fn [canvas-properties view-state clear-canvas]
       [:div.Controls
         [:div.Controls__inner
           [Walls update-current-tile canvas-properties control-settings toggle-walls]
-          [:div.ControlItem
-            [:img {:class (if (:paint-mode @canvas-properties) "active")
-                   :style {:width "40px" :height "40px"}
+          [:div.ControlItem {:class (if (:paint-mode @canvas-properties) "active")}
+            [:img {:style {:width "40px" :height "40px"}
                    :src "./tiles/basic/tile-1.jpg" :on-click #(toggle-walls control-settings true)}]
             [:p "Tiles"]]
-          [:div.ControlItem
-            [:svg {:viewBox "0 0 448 512" :class (if (= (:currentTile @canvas-properties) "pan") "active") :on-click #(resume-zoom canvas-properties)}
+          [:div.ControlItem {:class (if (= (:currentTile @canvas-properties) "pan") "active")}
+            [:svg {:viewBox "0 0 448 512" :on-click #(resume-zoom canvas-properties)}
               [:path {:fill "white" :d "M448 344v112a23.94 23.94 0 0 1-24 24H312c-21.39 0-32.09-25.9-17-41l36.2-36.2L224 295.6 116.77 402.9 153 439c15.09 15.1 4.39 41-17 41H24a23.94 23.94 0 0 1-24-24V344c0-21.4 25.89-32.1 41-17l36.19 36.2L184.46 256 77.18 148.7 41 185c-15.1 15.1-41 4.4-41-17V56a23.94 23.94 0 0 1 24-24h112c21.39 0 32.09 25.9 17 41l-36.2 36.2L224 216.4l107.23-107.3L295 73c-15.09-15.1-4.39-41 17-41h112a23.94 23.94 0 0 1 24 24v112c0 21.4-25.89 32.1-41 17l-36.19-36.2L263.54 256l107.28 107.3L407 327.1c15.1-15.2 41-4.5 41 16.9z"}]]
             [:p "Pan/Zoom"]]
-          [:div.ControlItem
-            [:svg {:viewBox "0 0 448 512" :class (if (:erase-mode @canvas-properties) "active") :on-click #(set-erase canvas-properties)}
+          [:div.ControlItem {:class (if (:erase-mode @canvas-properties) "active")}
+            [:svg {:viewBox "0 0 448 512" :on-click #(set-erase canvas-properties)}
               [:path {:fill "white" :d "M497.941 273.941c18.745-18.745 18.745-49.137 0-67.882l-160-160c-18.745-18.745-49.136-18.746-67.883 0l-256 256c-18.745 18.745-18.745 49.137 0 67.882l96 96A48.004 48.004 0 0 0 144 480h356c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12H355.883l142.058-142.059zm-302.627-62.627l137.373 137.373L265.373 416H150.628l-80-80 124.686-124.686z"}]]
              [:p "Erase"]]
           [:div.ControlItem
