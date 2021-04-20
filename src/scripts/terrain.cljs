@@ -9,16 +9,16 @@
 (defn draw-door [ctx event imgObj canvas-properties update-canvas-rep]
   (aset imgObj "src" (str "./tiles/terrain/"(:currentTile canvas-properties)".png"))
   (aset imgObj "onload" (fn []
-      (if (str/includes? (:currentTile canvas-properties) "door_tall")
-        (.drawImage ctx imgObj
-                    (- (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50)) 5)
-                    (+ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50)) 12))
-        (.drawImage ctx imgObj
-                    (+ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50)) 12)
-                    (- (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50)) 5)))
-        (update-canvas-rep
-          (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
-          (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50))))))
+                         (if (str/includes? (:currentTile canvas-properties) "door_tall")
+                           (.drawImage ctx imgObj
+                                       (- (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50)) 5)
+                                       (+ (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50)) 12))
+                           (.drawImage ctx imgObj
+                                       (+ (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50)) 12)
+                                       (- (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50)) 5)))
+                         (update-canvas-rep
+                           (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
+                           (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50))))))
 
 
 (defn draw-terrain-wall [ctx event imgObj canvas-properties update-canvas-rep]
@@ -27,12 +27,12 @@
   (aset imgObj "src" (str "./tiles/terrain/"(:currentTile canvas-properties)".jpg"))
 
   (aset imgObj "onload" (fn []
-    (.drawImage ctx imgObj
-      (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
-      (- (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50)) 2))
-    (update-canvas-rep
-      (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
-      (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50))))))
+                         (.drawImage ctx imgObj
+                           (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
+                           (- (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50)) 2))
+                         (update-canvas-rep
+                           (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
+                           (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50))))))
 
 
 (defn draw-trap [ctx event imgObj canvas-properties update-canvas-rep]
@@ -40,9 +40,9 @@
 
   (aset imgObj "src" (str "./tiles/terrain/"(:currentTile canvas-properties)".png"))
   (aset imgObj "onload" (fn []
-        (.drawImage ctx imgObj
-                    (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
-                    (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50)))
-        (update-canvas-rep
-          (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
-          (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50))))))
+                         (.drawImage ctx imgObj
+                                     (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
+                                     (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50)))
+                         (update-canvas-rep
+                           (* 50 (quot (/ (+ (* -1 (.-x (.getBoundingClientRect (.-target event)))) (get-x-position event)) (:zoom canvas-properties)) 50))
+                           (* 50 (quot (/ (+ (* -1 (.-y (.getBoundingClientRect (.-target event)))) (get-y-position event)) (:zoom canvas-properties)) 50))))))
