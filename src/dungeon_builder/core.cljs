@@ -39,7 +39,7 @@
 
 (defn core []
   [:div.Main
-    [New2 (if (and (check-preview-value @previews-shown) @currentMaps) true false) update-preview previews-shown] ; only existing users probably care here
+    ; [New2 (if (and (check-preview-value @previews-shown) @currentMaps) true false) update-preview previews-shown] ; only existing users probably care here
     [Home  loaded-map-atom view-state currentMaps]
     [Stage loaded-map-atom view-state currentMaps]])
 
