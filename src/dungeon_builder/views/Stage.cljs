@@ -58,7 +58,8 @@
     (= (:currentTile @canvas-properties) "door_tall")       3
     (= (:currentTile @canvas-properties) "door_long")       4
     (= (:currentTile @canvas-properties) "trap")            5
-    (= (:currentTile @canvas-properties) "chest")           6))
+    (= (:currentTile @canvas-properties) "chest")           6
+    (= (:currentTile @canvas-properties) "barrel")          7))
 
 (defn get-tile-value-terrain-load [val]
   (cond
@@ -67,7 +68,8 @@
     (= val 3) "door_tall"
     (= val 4) "door_long"
     (= val 5) "trap"
-    (= val 6) "chest"))
+    (= val 6) "chest"
+    (= val 7) "barrel"))
 
 (defn handle-wall-orientation [y x] ; y first as locicallit it's -> y down x
   (if (= (:tileType @canvas-properties) "wall")
@@ -132,6 +134,7 @@
         canvas (.getElementById js/document "Canvas")
         ctx (.getContext canvas "2d")]
     (cond
+      (str/includes? (:currentTile @canvas-properties) "barrel") (terrain/draw-trap ctx event imgObj @canvas-properties update-cavas-terrain-rep)
       (str/includes? (:currentTile @canvas-properties) "chest") (terrain/draw-trap ctx event imgObj @canvas-properties update-cavas-terrain-rep)
       (str/includes? (:currentTile @canvas-properties) "trap") (terrain/draw-trap ctx event imgObj @canvas-properties update-cavas-terrain-rep)
       (str/includes? (:currentTile @canvas-properties) "door")    (terrain/draw-door ctx event imgObj @canvas-properties update-cavas-terrain-rep)
@@ -274,7 +277,7 @@
                         ;TODO we need to think of a better way to do this - will get mess with more terrain
                         ; think we need to refactor the terrain/draw namespace to break out the canvas update - then just
                         ; not call it here so we can re-use hte logic we're already using to draw terrain
-                        (if (or (str/includes? imgSrc "trap") (str/includes? imgSrc "chest"))
+                        (if (or (str/includes? imgSrc "trap") (str/includes? imgSrc "chest") (str/includes? imgSrc "barrel"))
                           (do
                             (aset imgObj "src" (str "./tiles/terrain/"imgSrc".png"))
                             (aset imgObj "onload" (fn []
