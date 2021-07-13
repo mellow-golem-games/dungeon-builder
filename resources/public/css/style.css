@@ -392,3 +392,7 @@ body.hide-scroll .Main {
 .PreviewRow.buttonWrapper {
   margin-top: 25px;
 }
+
+.Preview.Page {
+  position: absolute;
+}
