@@ -1,13 +1,13 @@
 (ns dungeon_builder.core
     (:require [reagent.core :as reagent :refer [atom]]
-              [dungeon_builder.components.preview.new3 :refer [New3]]
+              [dungeon_builder.components.preview.new4 :refer [New4]]
               [dungeon_builder.views.Home :refer [Home]]
               [dungeon_builder.views.Stage :refer [Stage]]
               [dungeon_builder.services.state.global :refer [app-state]]
               [dungeon_builder.services.state.dispatcher :refer [handle-state-change]]
               [dungeon_builder.scripts.persistence :as persistence]))
 
-(def CURRENT_PREVIEW_VALUE "true3")
+(def CURRENT_PREVIEW_VALUE "true4")
 
 (enable-console-print!)
 
@@ -39,7 +39,7 @@
 
 (defn core []
   [:div.Main
-    [New3 (if (and (check-preview-value @previews-shown) @currentMaps) true false) update-preview previews-shown] ; only existing users probably care here
+    [New4 (if (and (check-preview-value @previews-shown) @currentMaps) true false) update-preview previews-shown] ; only existing users probably care here
     [Home  loaded-map-atom view-state currentMaps]
     [Stage loaded-map-atom view-state currentMaps]])
 
@@ -50,4 +50,3 @@
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
-

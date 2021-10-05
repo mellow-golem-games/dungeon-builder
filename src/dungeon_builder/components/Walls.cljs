@@ -69,4 +69,10 @@
       [:div.tileGroup__group
         [:img {:class (if (= (:currentTile @canvas-properties) "chest") "active") :src "./tiles/terrain/chest.png" :on-click #(on-wall-select canvas-properties "chest" "terrain" nil)}]]
       [:div.tileGroup__group
-        [:img {:class (if (= (:currentTile @canvas-properties) "barrel") "active") :src "./tiles/terrain/barrel.png" :on-click #(on-wall-select canvas-properties "barrel" "terrain" nil)}]]]])
+        [:img {:class (if (= (:currentTile @canvas-properties) "barrel") "active") :src "./tiles/terrain/barrel.png" :on-click #(on-wall-select canvas-properties "barrel" "terrain" nil)}]]]
+
+    [:h2 "Characters"]
+    [:div.tileGroup
+     [:div.tileGroup__group {:class (if (= (:currentTile @canvas-properties) "goblin") "active") :style {:height "120px"}}
+       [:img {:src "./tiles/characters/goblin.png" :on-click #(on-wall-select canvas-properties "goblin" "terrain" nil)}]
+       [:p "Goblin"]]]])

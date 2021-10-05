@@ -5,6 +5,7 @@
             [dungeon_builder.services.state.dispatcher :refer [handle-state-change]]
             [dungeon_builder.scripts.walls :as walls]
             [dungeon_builder.scripts.terrain :as terrain]
+            [dungeon_builder.scripts.character :as character]
             [dungeon_builder.scripts.position :refer [get-x-position get-y-position]]
             [clojure.string :as str]
             ["panzoom" :as panzoom]))
@@ -59,7 +60,8 @@
     (= (:currentTile @canvas-properties) "door_long")       4
     (= (:currentTile @canvas-properties) "trap")            5
     (= (:currentTile @canvas-properties) "chest")           6
-    (= (:currentTile @canvas-properties) "barrel")          7))
+    (= (:currentTile @canvas-properties) "barrel")          7
+    (= (:currentTile @canvas-properties) "goblin")          8))
 
 (defn get-tile-value-terrain-load [val]
   (cond
@@ -69,7 +71,8 @@
     (= val 4) "door_long"
     (= val 5) "trap"
     (= val 6) "chest"
-    (= val 7) "barrel"))
+    (= val 7) "barrel"
+    (= val 8) "goblin"))
 
 (defn handle-wall-orientation [y x] ; y first as locicallit it's -> y down x
   (if (= (:tileType @canvas-properties) "wall")
@@ -134,6 +137,7 @@
         canvas (.getElementById js/document "Canvas")
         ctx (.getContext canvas "2d")]
     (cond
+      (str/includes? (:currentTile @canvas-properties) "goblin") (character/draw-character ctx event imgObj @canvas-properties update-cavas-terrain-rep)
       (str/includes? (:currentTile @canvas-properties) "barrel") (terrain/draw-trap ctx event imgObj @canvas-properties update-cavas-terrain-rep)
       (str/includes? (:currentTile @canvas-properties) "chest") (terrain/draw-trap ctx event imgObj @canvas-properties update-cavas-terrain-rep)
       (str/includes? (:currentTile @canvas-properties) "trap") (terrain/draw-trap ctx event imgObj @canvas-properties update-cavas-terrain-rep)
@@ -295,12 +299,19 @@
                                                        (.drawImage ctx imgObj
                                                                    (+ (* 50 innerRowIndex) 12)
                                                                    (- (* 50 rowIndex) 5))))))
-                            (do
-                              (aset imgObj "src" (str "./tiles/terrain/"imgSrc".jpg"))
-                              (aset imgObj "onload" (fn []
-                                                     (.drawImage ctx imgObj
-                                                       (* 50 innerRowIndex)
-                                                       (- (* 50 rowIndex) 2))))))))
+                            (if (str/includes? imgSrc "goblin")
+                              (do
+                                (aset imgObj "src" (str "./tiles/characters/"imgSrc".png"))
+                                (aset imgObj "onload" (fn []
+                                                        (.drawImage ctx imgObj
+                                                                    (* 50 innerRowIndex)
+                                                                    (- (* 50 rowIndex) 2)))))
+                              (do
+                                (aset imgObj "src" (str "./tiles/terrain/"imgSrc".jpg"))
+                                (aset imgObj "onload" (fn []
+                                                       (.drawImage ctx imgObj
+                                                         (* 50 innerRowIndex)
+                                                         (- (* 50 rowIndex) 2)))))))))
                       (recur (drop 1 terrainObj))))))
               (recur (+ 1 innerRowIndex) (drop 1 tileRow)))))
        (recur (+ 1 rowIndex) (drop 1 tiles))))))
