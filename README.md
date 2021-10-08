@@ -22,6 +22,9 @@ Load flow:
 
 5. load function draws terrain
 
+## Prod Build
+
+lein do clean, cljsbuild once min
 
 
 ## License

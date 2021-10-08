@@ -1,14 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.totalWebConnections.dungeonMaker" version="1.7.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.totalWebConnections.dungeonMaker" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Dungeon Maker</name>
     <description>
-        Mobile app to build simple dungeons.
+        A sample Apache Cordova application that responds to the deviceready event.
     </description>
-    <author email="info@mellowgolemgames.com" href="http://mellowgolemgames.com">
-        Mellow Golem Games + Total Web Connections
+    <author email="dev@cordova.apache.org" href="http://cordova.io">
+        Apache Cordova Team
     </author>
     <content src="index.html" />
-    <plugin name="cordova-plugin-whitelist" spec="1" />
     <preference name="Camera Access To Save Image To Device" default=" " />
     <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
       <string>Save Images To Device</string>
@@ -37,7 +36,7 @@
               <key>NSAllowsArbitraryLoads</key>
               <true/>
           </dict>
-      </config-file>
+        </config-file>
     </platform>
     <icon density="mdpi" height="1024" platform="ios" src="res/icon/ios/icon.png" width="1024" />
     <icon density="mdpi" height="60" platform="ios" src="res/icon/ios/icon-60.png" width="60" />
